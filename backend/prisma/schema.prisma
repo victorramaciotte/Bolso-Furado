@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Lancamento {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  valor       Float
+  origem      String?
+  tipo        String
+  motivacao   String?
+  status      String
+  recorrencia String   
+  data        DateTime @default(now())
+  dataFR      DateTime?
+  categoria   String?
+}
