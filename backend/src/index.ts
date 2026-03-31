@@ -1,8 +1,12 @@
 import express from 'express';
 import { prisma } from './lib/prisma.js';
+import cors from 'cors'
+
 
 const app = express();
 app.use(express.json());
+app.use(cors()) 
+
 
 // Rota para Listar
 app.get('/lancamentos', async (req, res) => {

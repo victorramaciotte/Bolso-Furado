@@ -1,0 +1,17 @@
+.lista-lancamentos {
+  list-style: none;
+  padding: 1rem 0;
+  margin: 1rem 0 0 0;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  background-color: hsl(200, 5%, 94%);
+  border-radius: 20px;
+}
+
+.lista-loading {
+  text-align: center;
+  color: #888;
+}
