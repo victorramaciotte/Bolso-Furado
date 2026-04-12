@@ -136,23 +136,9 @@ model Lancamento {
 
 ---
 
-## ✅ Funcionalidades Implementadas
 
-- [x] Listagem de lançamentos (entradas e saídas)
-- [x] Card de lançamento com ícone, nome e valor colorido por tipo
-- [x] Modal para registro de novo lançamento
-- [x] Layout Mobile-First com limite de 480px
-- [x] Integração com API REST via `fetch`
 
-## 🚧 Próximas Funcionalidades
+## 👨‍💻 Autores
 
-- [ ] Tela de detalhe do lançamento
-- [ ] Filtro por tipo, categoria e status
-- [ ] Resumo financeiro (total de entradas, saídas e saldo)
-- [ ] Autenticação de usuário
-
----
-
-## 👨‍💻 Autor
 
 Desenvolvido como projeto acadêmico no curso de **Sistemas de Informação**.
