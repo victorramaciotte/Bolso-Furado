@@ -19,6 +19,7 @@ interface LancamentoData {
 export default function ListaLancamentos() {
   const [lancamentos, setLancamentos] = useState<LancamentoData[]>([])
   const [loading, setLoading] = useState(true)
+  const [toggle, setToggle] = useState<number | null>(null)
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/lancamentos`)
@@ -35,10 +36,18 @@ export default function ListaLancamentos() {
     <ul className="lista-lancamentos">
   {lancamentos.map(lanc => (
     <Lancamento
-      key={lanc.id}
       nome={lanc.nome}
       valor={lanc.valor}
       tipo={lanc.tipo}
+      origem={lanc.origem}
+      motivacao={lanc.motivacao}
+      status={lanc.status}
+      recorrencia={lanc.recorrencia}
+      data={lanc.data}
+      dataFR={lanc.dataFR}
+      categoria={lanc.categoria}
+      toggle={toggle === lanc.id}
+      onToggle={() => setToggle(prev => prev === lanc.id ? null : lanc.id)}
     />
   ))}
 </ul>
