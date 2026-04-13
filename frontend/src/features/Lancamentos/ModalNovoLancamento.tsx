@@ -20,7 +20,8 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
     categoria: lancamento?.categoria ?? '',
     motivacao: lancamento?.motivacao ?? '',
     status: lancamento?.status ?? '',
-    recorrencia: lancamento?.recorrencia?.slice(0, 10) ?? '',
+    recorrencia: lancamento?.recorrencia,
+    dataFR: lancamento?.dataFR?.slice(0, 10) ?? '',
   })
   const [erros, setErros] = useState({
   nome: '',
@@ -40,7 +41,8 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
       categoria: lancamento.categoria ?? '',
       motivacao: lancamento.motivacao ?? '',
       status: lancamento.status ?? '',
-      recorrencia: lancamento.recorrencia?.slice(0, 10) ?? '',
+      recorrencia: lancamento?.recorrencia,
+      dataFR: lancamento?.dataFR?.slice(0, 10) ?? '',
     })
   }
 }, [lancamento])
@@ -229,7 +231,24 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
           </div>
           <div className="modal-grupo">
             <label>Recorrência:</label>
-            <input name="recorrencia" type="date" value={form.recorrencia} onChange={handleChange} />
+            <select name="recorrencia" value={form.recorrencia} onChange={handleChange}>
+              <option value="" disabled>Selecione</option>
+                {['Nenhuma', 'Diário','Semanal','Quinzenal','Mensal'].map(o => (
+              <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+
+            {form.recorrencia && form.recorrencia !== 'Nenhuma' && (
+              <div className="modal-grupo">
+                <label>Data Final da Recorrência:</label>
+                <input
+                  name="dataFR"
+                  type="date"
+                  value={form.dataFR ?? ''}
+                  onChange={handleChange}
+                />
+              </div>
+              )}
           </div>
         </div>
 
