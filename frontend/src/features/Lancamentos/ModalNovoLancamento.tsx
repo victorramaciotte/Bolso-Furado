@@ -23,6 +23,7 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
     recorrencia: lancamento?.recorrencia,
     dataFR: lancamento?.dataFR?.slice(0, 10) ?? '',
   })
+  
   const [erros, setErros] = useState({
   nome: '',
   valor: '',
@@ -198,12 +199,18 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
           <div className="modal-grupo">
         <label>Categoria <span className="obrigatorio">*</span></label>
 
-        <select name="categoria" value={form.categoria} onChange={handleChange}>
-            <option value="" disabled>Selecione</option>
-              {['Alimentação','Transporte','Moradia'].map(o => (
-            <option key={o} value={o}>{o}</option>
+        <input
+          name="categoria"
+          value={form.categoria}
+          onChange={handleChange}
+          list="categorias-list"
+          placeholder="Selecione ou digite"
+        />
+        <datalist id="categorias-list">
+          {['Alimentação','Transporte','Moradia'].map(o => (
+            <option key={o} value={o} />
           ))}
-        </select>
+        </datalist>
 
   {erros.categoria && (<span className="erro">{erros.categoria}</span>
   )}
