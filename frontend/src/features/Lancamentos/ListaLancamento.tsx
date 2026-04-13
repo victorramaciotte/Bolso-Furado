@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './ListaLancamento.css'
 import Lancamento from '../Lancamentos/Lancamento' 
 
-interface LancamentoData {
+export interface LancamentoData {
   id: number
   nome: string
   valor: number
@@ -16,7 +16,11 @@ interface LancamentoData {
   categoria?: string
 }
 
-export default function ListaLancamentos() {
+interface Props {
+  onEditar: (lanc: LancamentoData) => void
+}
+
+export default function ListaLancamentos({ onEditar }: Props) {
   const [lancamentos, setLancamentos] = useState<LancamentoData[]>([])
   const [loading, setLoading] = useState(true)
   const [toggle, setToggle] = useState<number | null>(null)
@@ -36,6 +40,7 @@ export default function ListaLancamentos() {
     <ul className="lista-lancamentos">
   {lancamentos.map(lanc => (
     <Lancamento
+      key={lanc.id}
       nome={lanc.nome}
       valor={lanc.valor}
       tipo={lanc.tipo}
@@ -47,6 +52,7 @@ export default function ListaLancamentos() {
       dataFR={lanc.dataFR}
       categoria={lanc.categoria}
       toggle={toggle === lanc.id}
+      onEditar={() => onEditar(lanc)}
       onToggle={() => setToggle(prev => prev === lanc.id ? null : lanc.id)}
     />
   ))}

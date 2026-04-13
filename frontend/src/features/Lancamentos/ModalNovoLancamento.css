@@ -82,9 +82,22 @@
   font-weight: 400;
 }
 
+.edit-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  
+}
+
+.action {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: flex-end;
+}
+
 .modal-btn {
   margin-top: 0.75rem;
-  align-self: flex-end;
   background: #ccc;
   border: none;
   border-radius: 8px;
@@ -92,6 +105,10 @@
   font-weight: 600;
   cursor: pointer;
   font-size: 0.9rem;
+  display: flex;        
+  align-items: center;  
+  gap: 0.4rem;
+  justify-content: center;
 }
 
 .modal-btn:hover {

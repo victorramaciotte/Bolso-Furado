@@ -1,37 +1,76 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './ModalNovoLancamento.css'
+import type { LancamentoData } from './ListaLancamento'
 
 interface Props {
   onClose: () => void
   onSucesso: () => void
+  lancamento?: LancamentoData
 }
 
-export default function ModalNovoLancamento({ onClose, onSucesso }: Props) {
+export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: Props) {
+  const modoEdicao = !!lancamento
   const [form, setForm] = useState({
-    nome: '',
-    valor: '',
-    tipo: '',
-    data: '',
-    origem: '',
-    categoria: '',
-    motivacao: '',
-    status: '',
-    recorrencia: '',
+    nome: lancamento?.nome ?? '',
+    valor: lancamento?.valor.toString() ?? '',
+    tipo: lancamento?.tipo ?? '',
+    data: lancamento?.data?.slice(0, 10) ?? '', 
+    origem: lancamento?.origem ?? '',
+    categoria: lancamento?.categoria ?? '',
+    motivacao: lancamento?.motivacao ?? '',
+    status: lancamento?.status ?? '',
+    recorrencia: lancamento?.recorrencia?.slice(0, 10) ?? '',
   })
+
+  useEffect(() => {
+  if (lancamento) {
+    setForm({
+      nome: lancamento.nome ?? '',
+      valor: lancamento.valor.toString() ?? '',
+      tipo: lancamento.tipo ?? '',
+      data: lancamento.data?.slice(0, 10) ?? '',
+      origem: lancamento.origem ?? '',
+      categoria: lancamento.categoria ?? '',
+      motivacao: lancamento.motivacao ?? '',
+      status: lancamento.status ?? '',
+      recorrencia: lancamento.recorrencia?.slice(0, 10) ?? '',
+    })
+  }
+}, [lancamento])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  async function handleSubmit() {
-    await fetch(`${import.meta.env.VITE_API_URL}/lancamentos`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...form,
-        valor: parseFloat(form.valor),
-      }),
+  async function handleDelete() {
+   try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/lancamentos/${lancamento!.id}`, {
+      method: 'DELETE',
     })
+    if (res.ok) {
+      onSucesso()
+    } else {
+      console.error('Erro ao deletar, status:', res.status)
+    }
+  } catch (err) {
+    console.error('Erro ao deletar:', err)
+  }
+}
+
+  async function handleSubmit() {
+    if (modoEdicao) {
+      await fetch(`${import.meta.env.VITE_API_URL}/lancamentos/${lancamento!.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, valor: parseFloat(form.valor) }),
+      })
+    } else {
+      await fetch(`${import.meta.env.VITE_API_URL}/lancamentos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, valor: parseFloat(form.valor) }),
+      })
+    }
     onSucesso()
     onClose()
   }
@@ -116,7 +155,22 @@ export default function ModalNovoLancamento({ onClose, onSucesso }: Props) {
           </div>
         </div>
 
-        <button className="modal-btn" onClick={handleSubmit}>Registrar Lançamento</button>
+        <section className='action'>
+            {modoEdicao && (
+            <section className='edit-btn'>
+              <button className="modal-btn" onClick={(e) => { e.stopPropagation(); handleDelete(); }}>
+                <i className="fi fi-br-trash"></i>
+                Remover
+              </button>
+              <button className="modal-btn" onClick={onClose}>Cancelar</button> 
+            </section>
+            
+          )}
+
+          <button className="modal-btn" onClick={handleSubmit}>{modoEdicao ? 'Salvar Alterações' : 'Registrar Lançamento'}</button>
+        </section>
+
+        
       </div>
     </div>
   )

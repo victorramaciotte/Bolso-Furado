@@ -13,10 +13,11 @@ interface LancamentoProps {
   dataFR?: string
   categoria?: string
   toggle: boolean
+  onEditar: () => void
   onToggle: () => void
 }
 
-function Lancamento({ nome, valor, tipo, origem, motivacao, status, recorrencia, data, dataFR, categoria, toggle, onToggle}: LancamentoProps) {
+function Lancamento({ nome, valor, tipo, origem, motivacao, status, recorrencia, data, dataFR, categoria, toggle, onEditar, onToggle}: LancamentoProps) {
   const isEntrada = tipo === 'entrada'
 
   return (
@@ -25,14 +26,14 @@ function Lancamento({ nome, valor, tipo, origem, motivacao, status, recorrencia,
             <section className='details'>
                     <section className='top'>
                         <h3>{nome}</h3>
-                        <span className="icon-wrapper">
+                        <span className="icon-wrapper" onClick={onEditar}>
                             <i className="fi fi-br-edit"></i>
                         </span>
                     </section>
                     
                     <p><b>Valor:</b> R$ {valor.toFixed(2)} </p>
                     <p><b>Tipo:</b> {tipo}</p>
-                    <p><b>Data:</b> {data}</p>
+                    <p><b>Data:</b> {new Date(data).toLocaleDateString('pt-BR')}</p>
                     <p><b>Origem:</b> {origem}</p>
                     <p><b>Categoria:</b> {categoria}</p>
                     {status? (<p><b>Status:</b> {status}</p>) : (null)}
