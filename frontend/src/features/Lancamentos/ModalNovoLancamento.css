@@ -114,3 +114,15 @@
 .modal-btn:hover {
   background: #bbb;
 }
+
+.erro {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.obrigatorio {
+  color: red;
+  margin-left: 4px;
+}
