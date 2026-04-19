@@ -1,54 +1,63 @@
 import { useState } from 'react'
 import './App.css'
-import ListaLancamentos from './features/Lancamentos/ListaLancamento'
-import ModalNovoLancamento from './features/Lancamentos/ModalNovoLancamento'
-import type { LancamentoData } from './features/Lancamentos/ListaLancamento'
+import ListEntries from './features/Entries/ListEntries'
+import ModalNovoLancamento from './features/Entries/ModalNewEntry'
+import type { EntryData } from './features/Entries/ListEntries'
 
 function App() {
-  const [modalAberto, setModalAberto] = useState(false)
-  const [recarregar, setRecarregar] = useState(0)
-  const [lancamentoEditando, setLancamentoEditando] = useState<LancamentoData | null>(null)
+  const [openModal, setOpenModal] = useState(false)
+  const [reload, setReload] = useState(0)
+  const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
 
-  function fecharModal() {
-  setModalAberto(false)
-  setLancamentoEditando(null)
+  function closeModal() {
+  setOpenModal(false)
+  setEditingEntry(null)
 }
 
-  function fecharERecarregar() {
-    fecharModal()
-    setRecarregar(r => r + 1)
+  function closeAndReload() {
+    closeModal()
+    setReload(r => r + 1)
   }
 
-  // Função para abrir o modal de edição de forma limpa
-  function abrirEdicao(lanc: LancamentoData) {
-    setLancamentoEditando(lanc)
-    setModalAberto(true)
+  
+  function openEditing(lanc: EntryData) {
+    setEditingEntry(lanc)
+    setOpenModal(true)
   }
 
   return (
-    <div className='app-container'>
-      <div className='menu-container'>
-        <i
-          className="fi fi-br-plus"
-          onClick={() => {
-            setLancamentoEditando(null); // Garante que não há lixo de edição
-            setModalAberto(true);
-          }}
-          style={{ cursor: 'pointer' }}
-        ></i>
-      </div>
+    <body>
+      <main className='app-container'>
+        <div className='menu-container'>
+          <i
+            className="fi fi-br-plus"
+            onClick={() => {
+              setEditingEntry(null); 
+              setOpenModal(true);
+            }}
+            style={{ cursor: 'pointer' }}
+          ></i>
+        </div>
 
-      <ListaLancamentos key={recarregar} onEditar={abrirEdicao}/>
+        <ListEntries key={reload} onEdit={openEditing}/>
 
-      {/* UM ÚNICO BLOCO PARA O MODAL */}
-      {modalAberto && (
-        <ModalNovoLancamento
-          onClose={fecharModal}
-          onSucesso={fecharERecarregar}
-          lancamento={lancamentoEditando ?? undefined} // Se for null, vira undefined
-        />
-      )}
-    </div>
+        {/* UM ÚNICO BLOCO PARA O MODAL */}
+        {openModal && (
+          <ModalNovoLancamento
+            onClose={closeModal}
+            onSuccess={closeAndReload}
+            entry={editingEntry ?? undefined} 
+          />
+        )}
+
+      
+
+      </main>
+      
+      <nav className='tabs'>
+          
+      </nav>
+    </body>
   )
 }
 

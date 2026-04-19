@@ -31,3 +31,11 @@
     line-height: 1;
     }
 }
+
+.tabs {
+  width: 100%;
+  background-color: aliceblue;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+}

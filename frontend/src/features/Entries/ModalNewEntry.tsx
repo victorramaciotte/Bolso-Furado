@@ -1,52 +1,52 @@
 import { useEffect, useState } from 'react'
-import './ModalNovoLancamento.css'
+import './ModalNewEntry.css'
 import { NumericFormat } from 'react-number-format'
-import type { LancamentoData } from './ListaLancamento'
+import type { EntryData } from './ListEntries'
 
 interface Props {
   onClose: () => void
-  onSucesso: () => void
-  lancamento?: LancamentoData
+  onSuccess: () => void
+  entry?: EntryData
 }
 
-export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: Props) {
-  const modoEdicao = !!lancamento
+export default function ModalNewEntry({ onClose, onSuccess, entry}: Props) {
+  const editMode = !!entry
   const [form, setForm] = useState({
-    nome: lancamento?.nome ?? '',
-    valor: lancamento?.valor.toString() ?? '',
-    tipo: lancamento?.tipo ?? '',
-    data: lancamento?.data?.slice(0, 10) ?? '', 
-    origem: lancamento?.origem ?? '',
-    categoria: lancamento?.categoria ?? '',
-    motivacao: lancamento?.motivacao ?? '',
-    status: lancamento?.status ?? '',
-    recorrencia: lancamento?.recorrencia,
-    dataFR: lancamento?.dataFR?.slice(0, 10) ?? '',
+    name: entry?.name ?? '',
+    value: entry?.value.toString() ?? '',
+    type: entry?.type ?? '',
+    date: entry?.date?.slice(0, 10) ?? '', 
+    origin: entry?.origin ?? '',
+    category: entry?.category ?? '',
+    reason: entry?.reason ?? '',
+    status: entry?.status ?? '',
+    recurrence: entry?.recurrence,
+    endDate: entry?.endDate?.slice(0, 10) ?? '',
   })
   
-  const [erros, setErros] = useState({
-  nome: '',
-  valor: '',
-  categoria: '',
-  tipo: '',
+  const [errors, setErrors] = useState({
+  name: '',
+  value: '',
+  category: '',
+  type: '',
 })
 
   useEffect(() => {
-  if (lancamento) {
+  if (entry) {
     setForm({
-      nome: lancamento.nome ?? '',
-      valor: lancamento.valor.toString() ?? '',
-      tipo: lancamento.tipo ?? '',
-      data: lancamento.data?.slice(0, 10) ?? '',
-      origem: lancamento.origem ?? '',
-      categoria: lancamento.categoria ?? '',
-      motivacao: lancamento.motivacao ?? '',
-      status: lancamento.status ?? '',
-      recorrencia: lancamento?.recorrencia,
-      dataFR: lancamento?.dataFR?.slice(0, 10) ?? '',
+      name: entry.name ?? '',
+      value: entry.value.toString() ?? '',
+      type: entry.type ?? '',
+      date: entry.date?.slice(0, 10) ?? '',
+      origin: entry.origin ?? '',
+      category: entry.category ?? '',
+      reason: entry.reason ?? '',
+      status: entry.status ?? '',
+      recurrence: entry?.recurrence,
+      endDate: entry?.endDate?.slice(0, 10) ?? '',
     })
   }
-}, [lancamento])
+}, [entry])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -54,11 +54,11 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
 
   async function handleDelete() {
    try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/lancamentos/${lancamento!.id}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/lancamentos/${entry!.id}`, {
       method: 'DELETE',
     })
     if (res.ok) {
-      onSucesso()
+      onSuccess()
     } else {
       console.error('Erro ao deletar, status:', res.status)
     }
@@ -68,43 +68,43 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
 }
 
  async function handleSubmit() {
-  let novosErros = {
-  nome: '',
-  valor: '',
-  categoria: '',
-  tipo: '',
+  let newErrors = {
+  name: '',
+  value: '',
+  category: '',
+  type: '',
 }
 
-  if (!form.nome) {
-    novosErros.nome = 'O nome é obrigatório!'
+  if (!form.name) {
+    newErrors.name = 'O nome é obrigatório!'
   }
 
-  if (!form.valor) {
-    novosErros.valor = 'O valor é obrigatório!'
+  if (!form.value) {
+    newErrors.value = 'O valor é obrigatório!'
   }
 
-  if (!form.categoria) {
-  novosErros.categoria = 'A categoria é obrigatória!'
+  if (!form.category) {
+  newErrors.category = 'A categoria é obrigatória!'
 }
 
-  if (!form.tipo) {
-  novosErros.tipo = 'O Tipo é obrigatório!'
+  if (!form.type) {
+  newErrors.type = 'O tipo é obrigatório!'
 }
-  setErros(novosErros)
+  setErrors(newErrors)
 
-  // Se tiver erro, NÃO envia
-  if (novosErros.nome || novosErros.valor || novosErros.categoria || novosErros.tipo) return
+  // Se tiver error, NÃO envia
+  if (newErrors.name || newErrors.value || newErrors.category || newErrors.type) return
 
   await fetch(`${import.meta.env.VITE_API_URL}/lancamentos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       ...form,
-      valor: parseFloat(form.valor),
+      value: parseFloat(form.value),
     }),
   })
   
-  onSucesso()
+  onSuccess()
   onClose()
 }
 
@@ -113,21 +113,21 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e: { stopPropagation: () => any }) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
-        <h2 className="modal-titulo">Registrar Lançamento</h2>
+        <h2 className="modal-title">Registrar Lançamento</h2>
 
-        <label>Nome Lançamento <span className="obrigatorio">*</span></label>
+        <label>Nome Lançamento <span className="required">*</span></label>
         <input
-  name="nome"
+  name="name"
   placeholder="Ex: Academia"
-  value={form.nome}
+  value={form.name}
   onChange={handleChange}
 />
 
-{erros.nome && <span className="erro">{erros.nome}</span>}
+{errors.name && <span className="error">{errors.name}</span>}
 
-        <div className="modal-linha">
-          <div className="modal-grupo">
-            <label>Valor <span className="obrigatorio">*</span></label>
+        <div className="modal-line">
+          <div className="modal-group">
+            <label>Valor <span className="required">*</span></label>
             <NumericFormat
   thousandSeparator="."
   decimalSeparator=","
@@ -135,23 +135,23 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
   decimalScale={2}
   fixedDecimalScale
   placeholder="R$ 0,00"
-  value={form.valor}
+  value={form.value}
   onValueChange={(values) => {
-    setForm({ ...form, valor: values.value })
+    setForm({ ...form, value: values.value })
   }}
 />
 
-{erros.valor && <span className="erro">{erros.valor}</span>}
+{errors.value && <span className="error">{errors.value}</span>}
           </div>
           
-          <div className="modal-grupo">
-            <label>Tipo <span className="obrigatorio">*</span></label>
+          <div className="modal-group">
+            <label>Tipo <span className="required">*</span></label>
 
             <div className="modal-radio">
               <label>
                 <input
                   type="radio"
-                  name="tipo"
+                  name="type"
                   value="entrada"
                   onChange={handleChange}
                 /> Receita
@@ -160,33 +160,33 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
               <label>
                 <input
                 type="radio"
-                name="tipo"
+                name="type"
                 value="saida"
                 onChange={handleChange}
               /> Despesa
             </label>
           </div>
 
-          {erros.tipo && (<span className="erro">{erros.tipo}</span>
+          {errors.type && (<span className="error">{errors.type}</span>
           )}
           </div>
 
         </div>
 
-        <div className="modal-linha">
-          <div className="modal-grupo">
+        <div className="modal-line">
+          <div className="modal-group">
             <label>Data:</label>
             <input
-  name="data"
+  name="date"
   type="date"
-  value={form.data}
+  value={form.date}
   onChange={handleChange}
   required
 />
           </div>
-          <div className="modal-grupo">
+          <div className="modal-group">
             <label>Origem:</label>
-            <select name="origem" value={form.origem} onChange={handleChange}>
+            <select name="origin" value={form.origin} onChange={handleChange}>
               <option value="" disabled>Selecione</option>
                 {['Salário','Freelance','Investimento','Presente','Outros'].map(o => (
               <option key={o} value={o}>{o}</option>
@@ -195,13 +195,13 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
           </div>
         </div>
 
-        <div className="modal-linha">
-          <div className="modal-grupo">
-        <label>Categoria <span className="obrigatorio">*</span></label>
+        <div className="modal-line">
+          <div className="modal-group">
+        <label>Categoria <span className="required">*</span></label>
 
         <input
-          name="categoria"
-          value={form.categoria}
+          name="category"
+          value={form.category}
           onChange={handleChange}
           list="categorias-list"
           placeholder="Selecione ou digite"
@@ -212,12 +212,12 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
           ))}
         </datalist>
 
-  {erros.categoria && (<span className="erro">{erros.categoria}</span>
+  {errors.category && (<span className="error">{errors.category}</span>
   )}
 </div>
-          <div className="modal-grupo">
-            <label>Motivação:</label>
-            <select name="motivacao" value={form.motivacao} onChange={handleChange}>
+          <div className="modal-group">
+            <label>Motivo:</label>
+            <select name="reason" value={form.reason} onChange={handleChange}>
               <option value="" disabled>Selecione</option>
                 {['Necessidade','Lazer','Investimento','Imprevisto','Desejo'].map(o => (
               <option key={o} value={o}>{o}</option>
@@ -226,8 +226,8 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
           </div>
         </div>
               
-        <div className="modal-linha">
-          <div className="modal-grupo">
+        <div className="modal-line">
+          <div className="modal-group">
             <label>Status:</label>
             <select name="status" value={form.status} onChange={handleChange}>
               <option value="" disabled>Selecione</option>
@@ -236,22 +236,22 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
               ))}
             </select>
           </div>
-          <div className="modal-grupo">
+          <div className="modal-group">
             <label>Recorrência:</label>
-            <select name="recorrencia" value={form.recorrencia} onChange={handleChange}>
+            <select name="recurrence" value={form.recurrence} onChange={handleChange}>
               <option value="" disabled>Selecione</option>
                 {['Nenhuma', 'Diário','Semanal','Quinzenal','Mensal'].map(o => (
               <option key={o} value={o}>{o}</option>
               ))}
             </select>
 
-            {form.recorrencia && form.recorrencia !== 'Nenhuma' && (
-              <div className="modal-grupo">
+            {form.recurrence && form.recurrence !== 'Nenhuma' && (
+              <div className="modal-group">
                 <label>Data Final da Recorrência:</label>
                 <input
-                  name="dataFR"
+                  name="endDate"
                   type="date"
-                  value={form.dataFR ?? ''}
+                  value={form.endDate ?? ''}
                   onChange={handleChange}
                 />
               </div>
@@ -260,7 +260,7 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
         </div>
 
         <section className='action'>
-            {modoEdicao && (
+            {editMode && (
             <section className='edit-btn'>
               <button className="modal-btn" onClick={(e) => { e.stopPropagation(); handleDelete(); }}>
                 <i className="fi fi-br-trash"></i>
@@ -271,7 +271,7 @@ export default function ModalNovoLancamento({ onClose, onSucesso, lancamento}: P
             
           )}
 
-          <button className="modal-btn" onClick={handleSubmit}>{modoEdicao ? 'Salvar Alterações' : 'Registrar Lançamento'}</button>
+          <button className="modal-btn" onClick={handleSubmit}>{editMode ? 'Salvar Alterações' : 'Registrar Lançamento'}</button>
         </section>
 
         

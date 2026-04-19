@@ -1,4 +1,4 @@
-.lista-lancamentos {
+.list-entries {
   list-style: none;
   padding: 1rem 0;
   margin: 1rem 0 0 0;
@@ -11,7 +11,7 @@
   border-radius: 20px;
 }
 
-.lista-loading {
+.loading-list {
   text-align: center;
   color: #888;
 }

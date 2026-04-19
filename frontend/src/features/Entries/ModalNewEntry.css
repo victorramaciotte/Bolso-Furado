@@ -31,7 +31,7 @@
   color: #555;
 }
 
-.modal-titulo {
+.modal-title {
   font-size: 1.1rem;
   font-weight: 700;
   margin: 0 0 0.5rem;
@@ -53,13 +53,13 @@
   box-sizing: border-box;
 }
 
-.modal-linha {
+.modal-line {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
 }
 
-.modal-grupo {
+.modal-group {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -115,14 +115,14 @@
   background: #bbb;
 }
 
-.erro {
+.error {
   color: red;
   font-size: 12px;
   margin-top: 4px;
   display: block;
 }
 
-.obrigatorio {
+.required {
   color: red;
   margin-left: 4px;
 }
