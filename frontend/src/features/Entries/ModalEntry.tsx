@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import './ModalNewEntry.css'
+import './ModalEntry.css'
 import { NumericFormat } from 'react-number-format'
 import type { EntryData } from './ListEntries'
+import { updateEntry, createEntry, deleteEntry } from '../../services/entryService'
 
 interface Props {
   onClose: () => void
@@ -9,14 +10,14 @@ interface Props {
   entry?: EntryData
 }
 
-export default function ModalNewEntry({ onClose, onSuccess, entry}: Props) {
+export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
   const editMode = !!entry
   const [form, setForm] = useState({
     name: entry?.name ?? '',
     value: entry?.value.toString() ?? '',
     type: entry?.type ?? '',
     date: entry?.date?.slice(0, 10) ?? '', 
-    origin: entry?.origin ?? '',
+    source: entry?.source ?? '',
     category: entry?.category ?? '',
     reason: entry?.reason ?? '',
     status: entry?.status ?? '',
@@ -38,7 +39,7 @@ export default function ModalNewEntry({ onClose, onSuccess, entry}: Props) {
       value: entry.value.toString() ?? '',
       type: entry.type ?? '',
       date: entry.date?.slice(0, 10) ?? '',
-      origin: entry.origin ?? '',
+      source: entry.source ?? '',
       category: entry.category ?? '',
       reason: entry.reason ?? '',
       status: entry.status ?? '',
@@ -54,14 +55,9 @@ export default function ModalNewEntry({ onClose, onSuccess, entry}: Props) {
 
   async function handleDelete() {
    try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/lancamentos/${entry!.id}`, {
-      method: 'DELETE',
-    })
-    if (res.ok) {
-      onSuccess()
-    } else {
-      console.error('Erro ao deletar, status:', res.status)
-    }
+    await deleteEntry(entry!.id)
+    onSuccess()
+    
   } catch (err) {
     console.error('Erro ao deletar:', err)
   }
@@ -92,17 +88,20 @@ export default function ModalNewEntry({ onClose, onSuccess, entry}: Props) {
 }
   setErrors(newErrors)
 
-  // Se tiver error, NÃO envia
+  // Se tiver erro, NÃO envia
   if (newErrors.name || newErrors.value || newErrors.category || newErrors.type) return
 
-  await fetch(`${import.meta.env.VITE_API_URL}/lancamentos`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      ...form,
-      value: parseFloat(form.value),
-    }),
+  if (editMode) {
+  await updateEntry(entry!.id, {
+    ...form,
+    value: parseFloat(form.value)
   })
+} else {
+  await createEntry({
+    ...form,
+    value: parseFloat(form.value)
+  })
+}
   
   onSuccess()
   onClose()
@@ -186,7 +185,7 @@ export default function ModalNewEntry({ onClose, onSuccess, entry}: Props) {
           </div>
           <div className="modal-group">
             <label>Origem:</label>
-            <select name="origin" value={form.origin} onChange={handleChange}>
+            <select name="source" value={form.source} onChange={handleChange}>
               <option value="" disabled>Selecione</option>
                 {['Salário','Freelance','Investimento','Presente','Outros'].map(o => (
               <option key={o} value={o}>{o}</option>

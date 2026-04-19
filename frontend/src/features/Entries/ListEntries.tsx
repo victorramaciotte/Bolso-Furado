@@ -6,15 +6,17 @@ export interface EntryData {
   id: number
   name: string
   value: number
-  origin?: string
+  source?: string
   type: string
   reason?: string
   status: string
-  recurrence: string
+  recurrence?: string
   date: string
   endDate?: string
   category?: string
 }
+
+export type CreateEntryData = Omit <EntryData, 'id'>
 
 interface Props {
   onEdit: (lanc: EntryData) => void
@@ -44,7 +46,7 @@ export default function ListEntries({ onEdit }: Props) {
       name={lanc.name}
       value={lanc.value}
       type={lanc.type}
-      origin={lanc.origin}
+      source={lanc.source}
       reason={lanc.reason}
       status={lanc.status}
       recurrence={lanc.recurrence}

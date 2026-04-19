@@ -5,10 +5,10 @@ interface EntryProps {
   name: string
   value: number
   type: string
-  origin?: string
+  source?: string
   reason? :  string
   status: string
-  recurrence: string
+  recurrence?: string
   date: string
   endDate?: string
   category?: string
@@ -17,7 +17,7 @@ interface EntryProps {
   onToggle: () => void
 }
 
-function Entry({ name, value, type, origin, reason, status, recurrence, date, endDate, category, toggle, onEdit, onToggle}: EntryProps) {
+function Entry({ name, value, type, source, reason, status, recurrence, date, endDate, category, toggle, onEdit, onToggle}: EntryProps) {
   const isIncome = type === 'entrada'
 
   return (
@@ -34,7 +34,7 @@ function Entry({ name, value, type, origin, reason, status, recurrence, date, en
                     <p><b>Valor:</b> R$ {value.toFixed(2)} </p>
                     <p><b>Tipo:</b> {type}</p>
                     <p><b>Data:</b> {new Date(date).toLocaleDateString('pt-BR')}</p>
-                    <p><b>Origem:</b> {origin}</p>
+                    <p><b>Origem:</b> {source}</p>
                     <p><b>Categoria:</b> {category}</p>
                     {status? (<p><b>Status:</b> {status}</p>) : (null)}
                     {reason? (<p><b>Motivação:</b> {reason}</p>) : (null)}

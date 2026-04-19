@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import ListEntries from './features/Entries/ListEntries'
-import ModalNovoLancamento from './features/Entries/ModalNewEntry'
+import ModalEntry from './features/Entries/ModalEntry'
 import type { EntryData } from './features/Entries/ListEntries'
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
   }
 
   return (
-    <body>
+    <div>
       <main className='app-container'>
         <div className='menu-container'>
           <i
@@ -43,7 +43,7 @@ function App() {
 
         {/* UM ÚNICO BLOCO PARA O MODAL */}
         {openModal && (
-          <ModalNovoLancamento
+          <ModalEntry
             onClose={closeModal}
             onSuccess={closeAndReload}
             entry={editingEntry ?? undefined} 
@@ -57,7 +57,7 @@ function App() {
       <nav className='tabs'>
           
       </nav>
-    </body>
+    </div>
   )
 }
 

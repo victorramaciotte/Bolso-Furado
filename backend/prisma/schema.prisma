@@ -7,16 +7,16 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Lancamento {
+model Entry {
   id          Int      @id @default(autoincrement())
-  nome        String
-  valor       Float
-  origem      String?
-  tipo        String
-  motivacao   String?
+  name        String
+  value       Float
+  source      String?
+  type        String
+  reason      String?
   status      String
-  recorrencia String   
-  data        DateTime @default(now())
-  dataFR      DateTime?
-  categoria   String?
+  recurrence  String?   
+  date        DateTime @default(now())
+  endDate     DateTime?
+  category    String?
 }

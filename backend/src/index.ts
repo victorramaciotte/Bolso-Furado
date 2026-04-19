@@ -9,29 +9,29 @@ app.use(cors())
 
 
 // Rota para Listar
-app.get('/lancamentos', async (req, res) => {
-  const lancamentos = await prisma.lancamento.findMany();
-  res.json(lancamentos);
+app.get('/entries', async (req, res) => {
+  const entries = await prisma.entry.findMany();
+  res.json(entries);
 });
 
 // Rota para Criar
-app.post('/lancamentos', async (req, res) => {
+app.post('/entries', async (req, res) => {
   console.log('body recebido:', req.body)
   try {
-    const { nome, valor, tipo, origem, motivacao, status, recorrencia, data, dataFR, categoria } = req.body;
+    const { name, value, type, source, reason, status, recurrence, date, endDate, category } = req.body;
     
-    const novo = await prisma.lancamento.create({
+    const novo = await prisma.entry.create({
       data: { 
-        nome, 
-        valor, 
-        tipo, 
-        origem, 
-        motivacao, 
+        name, 
+        value, 
+        type, 
+        source, 
+        reason, 
         status, 
-        recorrencia, 
-        categoria,
-        ...(data && { data: new Date(data) }),
-        ...(dataFR && { dataFR: new Date(dataFR) }), 
+        recurrence, 
+        category,
+        ...(date && { date: new Date(date) }),
+        ...(endDate && { endDate: new Date(endDate) }), 
     }
     });
     
@@ -43,23 +43,23 @@ app.post('/lancamentos', async (req, res) => {
 });
 
 // Rota para Editar
-app.put('/lancamentos/:id', async (req, res) => {
+app.put('/entries/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const { nome, valor, tipo, origem, motivacao, status, recorrencia, data, dataFR, categoria } = req.body;
+    const { name, value, type, source, reason, status, recurrence, date, endDate, category } = req.body;
   
-    const atualizado = await prisma.lancamento.update({
+    const atualizado = await prisma.entry.update({
         where: {id},
         data: { 
-            nome, 
-            valor, 
-            tipo, 
-            origem, 
-            motivacao, 
+            name, 
+            value, 
+            type, 
+            source, 
+            reason, 
             status, 
-            recorrencia, 
-            categoria,
-            ...(data && { data: new Date(data) }),
-            ...(dataFR && { dataFR: new Date(dataFR) }),
+            recurrence, 
+            category,
+            ...(date && { date: new Date(date) }),
+            ...(endDate && { endDate: new Date(endDate) }),
         }
   });
   
@@ -67,10 +67,10 @@ app.put('/lancamentos/:id', async (req, res) => {
 });
 
 // Rota para Deletar
-app.delete('/lancamentos/:id', async (req, res) => {
+app.delete('/entries/:id', async (req, res) => {
     try {
     const id = parseInt(req.params.id);
-    await prisma.lancamento.delete({
+    await prisma.entry.delete({
       where: { id }
     });
     res.status(204).send();
