@@ -1,63 +1,34 @@
-import { useState } from 'react'
+import { useIsMobile } from './hooks/useIsMobile'
 import './App.css'
-import ListEntries from './features/Entries/ListEntries'
-import ModalEntry from './features/Entries/ModalEntry'
-import type { EntryData } from './features/Entries/ListEntries'
+import { useState } from 'react'
+import FinanceView from './views/FinanceView'
+import GoalsView from './views/GoalsView'
 
 function App() {
-  const [openModal, setOpenModal] = useState(false)
-  const [reload, setReload] = useState(0)
-  const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
-
-  function closeModal() {
-  setOpenModal(false)
-  setEditingEntry(null)
-}
-
-  function closeAndReload() {
-    closeModal()
-    setReload(r => r + 1)
-  }
-
+  const isMobile = useIsMobile()
+  const [activeTab, setActiveTab] = useState('finance')
   
-  function openEditing(lanc: EntryData) {
-    setEditingEntry(lanc)
-    setOpenModal(true)
-  }
-
   return (
-    <div>
-      <main className='app-container'>
-        <div className='menu-container'>
-          <i
-            className="fi fi-br-plus"
-            onClick={() => {
-              setEditingEntry(null); 
-              setOpenModal(true);
-            }}
-            style={{ cursor: 'pointer' }}
-          ></i>
-        </div>
+    <>
+      {isMobile ? (
+        <section className='wrapper'>
+        <main>
+          {activeTab === 'finance' && <FinanceView/>}
+          {activeTab === 'goals' && <GoalsView/>}
+        </main>
+        <nav className='menu'>
+          <button className={activeTab === 'finance' ? 'active' : ''} onClick={() => setActiveTab('finance')}>Gestão</button>
+          <button className={activeTab === 'goals' ? 'active' : ''} onClick={() => setActiveTab('goals')}>Metas</button>
+        </nav>
+        </section>
+      ) : (
 
-        <ListEntries key={reload} onEdit={openEditing}/>
+        <span>You're on desktop WOW!!</span>
 
-        {/* UM ÚNICO BLOCO PARA O MODAL */}
-        {openModal && (
-          <ModalEntry
-            onClose={closeModal}
-            onSuccess={closeAndReload}
-            entry={editingEntry ?? undefined} 
-          />
-        )}
-
-      
-
-      </main>
-      
-      <nav className='tabs'>
-          
-      </nav>
-    </div>
+      )}
+    </>
+    
+    
   )
 }
 

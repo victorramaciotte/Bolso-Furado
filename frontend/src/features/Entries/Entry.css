@@ -1,7 +1,7 @@
 .container {
     display: grid;
     background-color: hsl(200, 5%, 95%);
-    width: calc(100% - 1rem);
+    width: 100%;
     padding: 8px;
     border-radius: 10px;
     cursor: pointer;

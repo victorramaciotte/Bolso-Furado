@@ -1,0 +1,41 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; 
+  width: 100%;
+  min-width: 320px;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0;
+  flex-shrink: 0;
+  background-color:hsl(200, 5%, 90%); ;
+}
+
+.menu-container {
+  box-sizing: border-box;
+  width: calc(100% - 1rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem;
+  color: black;
+  margin: 0 auto;
+
+    i {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 2rem;
+        width: 2rem;
+        font-size: 1.2rem;
+        line-height: 1;
+        }
+    
+    button {
+        background: transparent;
+        text-align: left;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}

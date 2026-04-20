@@ -1,41 +1,32 @@
-.app-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch; 
+.wrapper {
   width: 100%;
-  min-width: 320px;
-  max-width: 480px;
-  min-height: 100vh;
-  margin: 0;
-  flex-shrink: 0;
-  background-color:hsl(200, 5%, 90%); ;
+  display: grid;
+  grid-template-rows: 3fr auto;
+  grid-template-areas: "main" "nav";
 }
 
-.menu-container {
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 3rem;
-  color: black;
-  padding: 0 1rem 0;
+main {
+  grid-area: main;
+}
 
-  i {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2rem;
-    width: 2rem;
-    font-size: 1.2rem;
-    line-height: 1;
+.menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  grid-area: nav;
+  align-items: center;
+  margin: 0 auto;
+  
+  button {
+    border: none;
+    background-color: aliceblue;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  button.active {
+      background-color: aquamarine;
+      font-weight: 600;
     }
 }
 
-.tabs {
-  width: 100%;
-  background-color: aliceblue;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: center;
-}
