@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './ListEntries.css'
 import Entry from './Entry' 
+import { getEntries } from '../../services/entryService'
 
 export interface EntryData {
   id: number
@@ -28,8 +29,7 @@ export default function ListEntries({ onEdit }: Props) {
   const [toggle, setToggle] = useState<number | null>(null)
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/entries`)
-      .then(res => res.json())
+    getEntries()
       .then(date => {
         setEntries(date)
         setLoading(false)

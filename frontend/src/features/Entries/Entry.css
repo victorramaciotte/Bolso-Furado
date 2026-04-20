@@ -1,11 +1,19 @@
 .container {
     display: grid;
     background-color: hsl(200, 5%, 95%);
-    width: 90%;
+    width: calc(100% - 1rem);
     padding: 8px;
     border-radius: 10px;
     cursor: pointer;
+    max-height: 5rem;
+    box-sizing: border-box;
+    transition: max-height 1s ease-in;
 }
+
+.expanded {
+        max-height: 1000px;
+        transition: max-height 1.5s ease-out;
+    }
 
 .icon-container {
     display: flex;
@@ -13,22 +21,29 @@
     justify-content: center;
 }
 
-.header {
+header {
     display: grid;
     grid-template-columns: 3rem 3fr 5rem;
     width: 100%;
+    gap: 10px;
 }
 
 .details {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 20px;
     align-content: flex-start;
+    font-size: 0.9rem;
+    width: 100%;
+    animation: fadeIn 0.8s ease;
     
     p {
         margin: 0;
         line-height: 1.5;
     }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .top {
@@ -57,6 +72,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 1rem;
 }
 
 .value {
