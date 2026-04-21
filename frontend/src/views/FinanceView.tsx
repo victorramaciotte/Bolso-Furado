@@ -4,10 +4,15 @@ import ModalEntry from '../features/Entries/ModalEntry'
 import type { EntryData } from '../features/Entries/ListEntries'
 import './FinanceView.css'
 
-function FinanceView() {
-  const [openModal, setOpenModal] = useState(false)
+interface Props {
+  openModal: boolean
+  setOpenModal: (value: boolean) => void
+  editingEntry: EntryData | null
+  setEditingEntry: (value: EntryData | null) => void
+}
+
+function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry} : Props) {
   const [reload, setReload] = useState(0)
-  const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
 
   function closeModal() {
   setOpenModal(false)

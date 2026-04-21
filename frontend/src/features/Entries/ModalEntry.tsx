@@ -116,11 +116,11 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
 
         <label>Nome Lançamento <span className="required">*</span></label>
         <input
-  name="name"
-  placeholder="Ex: Academia"
-  value={form.name}
-  onChange={handleChange}
-/>
+          name="name"
+          placeholder="Ex: Academia"
+          value={form.name}
+          onChange={handleChange}
+        />
 
 {errors.name && <span className="error">{errors.name}</span>}
 
@@ -128,16 +128,16 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
           <div className="modal-group">
             <label>Valor <span className="required">*</span></label>
             <NumericFormat
-  thousandSeparator="."
-  decimalSeparator=","
-  prefix="R$ "
-  decimalScale={2}
-  fixedDecimalScale
-  placeholder="R$ 0,00"
-  value={form.value}
-  onValueChange={(values) => {
-    setForm({ ...form, value: values.value })
-  }}
+              thousandSeparator="."
+              decimalSeparator=","
+              prefix="R$ "
+              decimalScale={2}
+              fixedDecimalScale
+              placeholder="R$ 0,00"
+              value={form.value}
+              onValueChange={(values) => {
+                setForm({ ...form, value: values.value })
+              }}
 />
 
 {errors.value && <span className="error">{errors.value}</span>}

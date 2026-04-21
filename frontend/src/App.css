@@ -11,20 +11,27 @@ main {
 
 .menu {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
+  grid-template-columns: 1fr  auto;
+  width: calc(100% - 1rem);
   grid-area: nav;
-  align-items: center;
-  margin: 0 auto;
-  
-  button {
-    border: none;
+  margin: .5rem auto;
+  padding: 0 1rem;
+
+  div {
+    border-radius: 2rem;
     background-color: aliceblue;
+    width: fit-content;
+  }
+  
+  button.nav {
+    border: none;
+    border-radius: 2rem;
     padding: 1rem 2rem;
     font-size: 1rem;
+    background: transparent;
   }
 
-  button.active {
+  button.nav.active {
       background-color: aquamarine;
       font-weight: 600;
     }
