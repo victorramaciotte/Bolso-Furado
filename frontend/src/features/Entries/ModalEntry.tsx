@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './ModalEntry.css'
 import { NumericFormat } from 'react-number-format'
 import type { EntryData } from './ListEntries'
-import { updateEntry, createEntry, deleteEntry } from '../../services/entryService'
+import { updateEntry, createEntry, deleteEntry, getCategories, createCategory } from '../../services/financeService'
 
 interface Props {
   onClose: () => void
@@ -10,7 +10,13 @@ interface Props {
   entry?: EntryData
 }
 
+export interface CategoryData {
+  id: number
+  name: string
+}
+
 export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
+  const [categories, setCategories] = useState<CategoryData[]>([])
   const editMode = !!entry
   const [form, setForm] = useState({
     name: entry?.name ?? '',
@@ -18,17 +24,25 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
     type: entry?.type ?? '',
     date: entry?.date?.slice(0, 10) ?? '', 
     source: entry?.source ?? '',
-    category: entry?.category ?? '',
+    category_id: entry?.category_id ?? '',
     reason: entry?.reason ?? '',
     status: entry?.status ?? '',
     recurrence: entry?.recurrence,
     endDate: entry?.endDate?.slice(0, 10) ?? '',
+    newCat: ''
   })
+
+    useEffect(() => {
+      getCategories()
+        .then(data => {
+          setCategories(data)
+        })
+    }, [])
   
   const [errors, setErrors] = useState({
   name: '',
   value: '',
-  category: '',
+  category_id: '',
   type: '',
 })
 
@@ -40,11 +54,12 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
       type: entry.type ?? '',
       date: entry.date?.slice(0, 10) ?? '',
       source: entry.source ?? '',
-      category: entry.category ?? '',
+      category_id: entry.category_id ?? '',
       reason: entry.reason ?? '',
       status: entry.status ?? '',
-      recurrence: entry?.recurrence,
+      recurrence: entry?.recurrence ?? '',
       endDate: entry?.endDate?.slice(0, 10) ?? '',
+      newCat: ''
     })
   }
 }, [entry])
@@ -64,10 +79,11 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
 }
 
  async function handleSubmit() {
+  let categoryId = form.category_id
   let newErrors = {
   name: '',
   value: '',
-  category: '',
+  category_id: '',
   type: '',
 }
 
@@ -79,8 +95,8 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
     newErrors.value = 'O valor é obrigatório!'
   }
 
-  if (!form.category) {
-  newErrors.category = 'A categoria é obrigatória!'
+  if (!form.category_id) {
+  newErrors.category_id = 'A categoria é obrigatória!'
 }
 
   if (!form.type) {
@@ -89,16 +105,25 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
   setErrors(newErrors)
 
   // Se tiver erro, NÃO envia
-  if (newErrors.name || newErrors.value || newErrors.category || newErrors.type) return
+  if (newErrors.name || newErrors.value || newErrors.category_id || newErrors.type) return
 
   if (editMode) {
   await updateEntry(entry!.id, {
     ...form,
-    value: parseFloat(form.value)
+    category_id: Number(categoryId),
+    value: parseFloat(form.value),
+    endDate: form.recurrence && form.recurrence !== 'Nenhuma' ? form.endDate : ''
   })
 } else {
+
+  if(form.category_id === 'new') {
+    const newCat = await createCategory(form.newCat)
+    categoryId = newCat.id
+  }
+
   await createEntry({
     ...form,
+    category_id: Number(categoryId),
     value: parseFloat(form.value)
   })
 }
@@ -117,7 +142,7 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
         <label>Nome Lançamento <span className="required">*</span></label>
         <input
           name="name"
-          placeholder="Ex: Academia"
+          placeholder="Ex: Academia, Conta de Água, Lanche"
           value={form.name}
           onChange={handleChange}
         />
@@ -198,20 +223,23 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
           <div className="modal-group">
         <label>Categoria <span className="required">*</span></label>
 
-        <input
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          list="categorias-list"
-          placeholder="Selecione ou digite"
-        />
-        <datalist id="categorias-list">
-          {['Alimentação','Transporte','Moradia'].map(o => (
-            <option key={o} value={o} />
-          ))}
-        </datalist>
+        <select name="category_id" value={form.category_id} onChange={handleChange}>
+            <option value="" disabled>Selecione</option>
+            {categories.map(cat => (
+              <option key={cat.id} value={cat.name}>{cat.name}</option>
+            ))}
 
-  {errors.category && (<span className="error">{errors.category}</span>
+            <option value="new">Nova Categoria</option>
+        </select>
+
+        {form.category_id && form.category_id == 'new' && (
+              <div className="modal-group">
+                <label>Nova Categoria:</label>
+                <input name="newCat" value={form.newCat} onChange={handleChange}/>
+              </div>
+              )}
+
+  {errors.category_id && (<span className="error">{errors.category_id}</span>
   )}
 </div>
           <div className="modal-group">

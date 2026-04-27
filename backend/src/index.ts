@@ -158,7 +158,7 @@ app.post('/categories', async (req, res) => {
   try {
     const { name } = req.body;
     
-    const novo = await prisma.category.create(name);
+    const novo = await prisma.category.create({data: { name }});
     
     res.status(201).json(novo);
   } catch (err) {

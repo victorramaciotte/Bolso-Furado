@@ -11,7 +11,11 @@ interface EntryProps {
   recurrence?: string
   date: string
   endDate?: string
-  category?: string
+  category_id: number
+  category: {
+    id: number
+    name: string
+  }
   toggle: boolean
   onEdit: () => void
   onToggle: () => void
@@ -32,7 +36,7 @@ function Entry({ name, value, type, source, reason, status, recurrence, date, en
                         </div>
                         <div className='description'>{name}</div>
                         <div style={{display:'flex', justifyContent: 'flex-end', animation: 'fadeIn 0.9s ease-in-out'}}>
-                            <span className="icon-wrapper" onClick={onEdit} style={{justifyContent: 'flex-end'}}>
+                            <span className="icon-wrapper" onClick={onEdit}>
                                 <i className="fi fi-br-edit"></i>
                             </span>
                         </div>
@@ -44,11 +48,11 @@ function Entry({ name, value, type, source, reason, status, recurrence, date, en
                         <p><b>Tipo:</b> {type}</p>
                         <p><b>Data:</b> {new Date(date).toLocaleDateString('pt-BR')}</p>
                         <p><b>Origem:</b> {source}</p>
-                        <p><b>Categoria:</b> {category}</p>
+                        <p><b>Categoria:</b> {category.name}</p>
                         {status? (<p><b>Status:</b> {status}</p>) : (null)}
                         {reason? (<p><b>Motivação:</b> {reason}</p>) : (null)}
                         {recurrence? (<p><b>Recorrência:</b> {recurrence}</p>) : (null)}
-                        {endDate? (<p><b>Data Final da Recorrência:</b> {endDate}</p>) : (null)}
+                        {endDate? (<p><b>Data Final da Recorrência:</b> {new Date(endDate).toLocaleDateString('pt-BR')}</p>) : (null)}
                     </section>
                     
 

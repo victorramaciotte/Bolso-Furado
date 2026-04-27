@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './ListEntries.css'
 import Entry from './Entry' 
-import { getEntries } from '../../services/entryService'
+import { getEntries } from '../../services/financeService'
 
 export interface EntryData {
   id: number
@@ -14,13 +14,17 @@ export interface EntryData {
   recurrence?: string
   date: string
   endDate?: string
-  category?: string
+  category_id: number
+  category: {
+    id: number
+    name: string
+  }
 }
 
-export type CreateEntryData = Omit <EntryData, 'id'>
+export type CreateEntryData = Omit <EntryData, 'id' | 'category'>
 
 interface Props {
-  onEdit: (lanc: EntryData) => void
+  onEdit: (entry: EntryData) => void
 }
 
 export default function ListEntries({ onEdit }: Props) {
@@ -30,8 +34,8 @@ export default function ListEntries({ onEdit }: Props) {
 
   useEffect(() => {
     getEntries()
-      .then(date => {
-        setEntries(date)
+      .then(data => {
+        setEntries(data)
         setLoading(false)
       })
   }, [])
@@ -40,24 +44,25 @@ export default function ListEntries({ onEdit }: Props) {
 
   return (
     <ul className="list-entries">
-  {entries.map(lanc => (
-    <Entry
-      key={lanc.id}
-      name={lanc.name}
-      value={lanc.value}
-      type={lanc.type}
-      source={lanc.source}
-      reason={lanc.reason}
-      status={lanc.status}
-      recurrence={lanc.recurrence}
-      date={lanc.date}
-      endDate={lanc.endDate}
-      category={lanc.category}
-      toggle={toggle === lanc.id}
-      onEdit={() => onEdit(lanc)}
-      onToggle={() => setToggle(prev => prev === lanc.id ? null : lanc.id)}
-    />
-  ))}
-</ul>
+    {entries.map(entry => (
+      <Entry
+        key={entry.id}
+        name={entry.name}
+        value={entry.value}
+        type={entry.type}
+        source={entry.source}
+        reason={entry.reason}
+        status={entry.status}
+        recurrence={entry.recurrence}
+        date={entry.date}
+        endDate={entry.endDate}
+        category_id={entry.category_id}
+        category={entry.category}
+        toggle={toggle === entry.id}
+        onEdit={() => onEdit(entry)}
+        onToggle={() => setToggle(prev => prev === entry.id ? null : entry.id)}
+      />
+    ))}
+  </ul>
   )
 }
