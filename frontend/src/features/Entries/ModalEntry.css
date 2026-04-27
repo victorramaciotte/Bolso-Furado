@@ -2,6 +2,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,7 +10,7 @@
 }
 
 .modal-box {
-  background: #e8e8e8;
+  background: var(--bg);
   border-radius: 16px;
   padding: 1.5rem;
   width: 90%;
@@ -28,7 +29,7 @@
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  color: #555;
+  color: var(--text);
 }
 
 .modal-title {
@@ -48,7 +49,7 @@
   padding: 0.4rem 0.6rem;
   border: none;
   border-radius: 6px;
-  background: #fff;
+  background: var(--bg-light);
   font-size: 0.9rem;
   box-sizing: border-box;
 }
@@ -69,7 +70,7 @@
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  background: #fff;
+  background: var(--bg);
   border-radius: 6px;
   padding: 0.4rem 0.6rem;
   font-size: 0.9rem;
@@ -98,7 +99,8 @@
 
 .modal-btn {
   margin-top: 0.75rem;
-  background: #ccc;
+  background: var(--primary);
+  color: var(--colored-text);
   border: none;
   border-radius: 8px;
   padding: 0.6rem 1.2rem;

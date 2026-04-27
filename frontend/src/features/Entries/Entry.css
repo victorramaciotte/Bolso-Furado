@@ -1,6 +1,6 @@
 .container {
     display: grid;
-    background-color: hsl(200, 5%, 95%);
+    background-color: var(--bg);
     width: 100%;
     padding: 8px;
     border-radius: 10px;
@@ -8,6 +8,7 @@
     max-height: 5rem;
     box-sizing: border-box;
     transition: max-height 1s ease-in;
+    color: var(--text);
 }
 
 .expanded {
@@ -57,7 +58,7 @@ header {
   height: 3rem;
   width: 3rem;
   border-radius: 50%;
-  background-color: hsl(200, 10%, 94%);
+  background-color: var(--bg-dark);
   display: flex;
   align-items: center;
   justify-content: center;

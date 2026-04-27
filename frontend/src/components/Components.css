@@ -1,6 +1,6 @@
 .fab {
     border-radius: 2rem;
-    background-color: aqua;
+    background-color: var(--primary);
     border: none;
     display: flex;
     place-items: center;
@@ -14,6 +14,6 @@
         align-items: center;
         font-size: 1.2rem;
         line-height: 1;
-        color: aliceblue;
+        color: var(--bg-light);
         }
 }

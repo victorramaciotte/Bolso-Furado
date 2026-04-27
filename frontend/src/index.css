@@ -17,3 +17,45 @@ body {
   display: flex;
   justify-content: center;
 }
+
+
+:root {
+  --bg-dark: #D1D6E3;
+  --bg: #E8EBF2;
+  --bg-light: #F5F6FA;
+
+  --text: #1A2133;
+  --text-muted: #6B7799;
+  --colored-text: #0D2F38;
+  --colored-text-muted: #4A8A99;
+
+  --highlight: #D8DCE8;
+  --border: #C5CBDA;
+  --border-muted: #B0B8CC;
+
+  /* Brand */
+  --primary-dark:  #195966;
+  --primary:       #40aabf;
+  --primary-light: #8fd0dc;
+}
+
+[data-theme="dark"] {
+  /* Background */
+  --bg-dark:    #161F30;
+  --bg:         #24314D;
+  --bg-light:   #384666;
+
+  /* Text */
+  --text:       #E8EBF2;
+  --text-muted: #9AA3B8;
+
+  /* Border */
+  --highlight:  #3a4560;
+  --border:     #2e3850;
+  --border-muted: #252f45;
+
+  /* Brand */
+  --primary-dark:  #195966;
+  --primary:       #40aabf;
+  --primary-light: #8fd0dc;
+}
