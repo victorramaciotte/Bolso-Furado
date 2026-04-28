@@ -58,10 +58,10 @@ app.put('/entries/:id', async (req, res) => {
             source, 
             reason, 
             status, 
-            recurrence, 
+            recurrence: recurrence || null, 
             category_id,
-            ...(date && { date: new Date(date) }),
-            ...(endDate && { endDate: new Date(endDate) }),
+            ...(date && { date: new Date(date + 'T00:00:00') }),
+            endDate: endDate ? new Date(endDate + 'T00:00:00') : null,
         }
   });
   
