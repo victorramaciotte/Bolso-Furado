@@ -226,7 +226,7 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
         <select name="category_id" value={form.category_id} onChange={handleChange}>
             <option value="" disabled>Selecione</option>
             {categories.map(cat => (
-              <option key={cat.id} value={cat.name}>{cat.name}</option>
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
             ))}
 
             <option value="new">Nova Categoria</option>

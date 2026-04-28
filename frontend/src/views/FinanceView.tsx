@@ -25,8 +25,8 @@ function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry} : 
   }
 
   
-  function openEditing(lanc: EntryData) {
-    setEditingEntry(lanc)
+  function openEditing(entry: EntryData) {
+    setEditingEntry(entry)
     setOpenModal(true)
   }
 
@@ -35,14 +35,6 @@ function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry} : 
       
         <div className='menu-container'>
             <button>Relatórios</button>
-            <i
-                className="fi fi-br-plus"
-                onClick={() => {
-                setEditingEntry(null); 
-                setOpenModal(true);
-                }}
-                style={{ cursor: 'pointer' }}
-            ></i>
         </div>
 
         <ListEntries key={reload} onEdit={openEditing}/>

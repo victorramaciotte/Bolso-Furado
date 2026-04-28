@@ -31,7 +31,7 @@ app.post('/entries', async (req, res) => {
         reason, 
         status, 
         recurrence, 
-        category_id,
+        category: { connect: { id: Number(category_id) } },
         ...(date && { date: new Date(date) }),
         ...(endDate && { endDate: new Date(endDate) }), 
     }
@@ -59,12 +59,12 @@ app.put('/entries/:id', async (req, res) => {
             reason, 
             status, 
             recurrence: recurrence || null, 
-            category_id,
+            category: { connect: { id: Number(category_id) } },
             ...(date && { date: new Date(date + 'T00:00:00') }),
             endDate: endDate ? new Date(endDate + 'T00:00:00') : null,
         }
   });
-  
+  console.log('category_id recebido:', category_id, typeof category_id)
   res.status(201).json(atualizado);
 });
 
