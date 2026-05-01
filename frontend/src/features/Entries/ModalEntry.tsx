@@ -147,7 +147,7 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
           onChange={handleChange}
         />
 
-{errors.name && <span className="error">{errors.name}</span>}
+        {errors.name && <span className="error">{errors.name}</span>}
 
         <div className="modal-line">
           <div className="modal-group">
@@ -287,18 +287,16 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
         </div>
 
         <section className='action'>
+          <button className="modal-btn btn-muted" onClick={onClose}>Cancelar</button> 
             {editMode && (
-            <section className='edit-btn'>
-              <button className="modal-btn" onClick={(e) => { e.stopPropagation(); handleDelete(); }}>
+              <button className="modal-btn btn-delete" onClick={(e) => { e.stopPropagation(); handleDelete(); }}>
                 <i className="fi fi-br-trash"></i>
                 Remover
               </button>
-              <button className="modal-btn" onClick={onClose}>Cancelar</button> 
-            </section>
             
           )}
 
-          <button className="modal-btn" onClick={handleSubmit}>{editMode ? 'Salvar Alterações' : 'Registrar Lançamento'}</button>
+          <button className="modal-btn btn-save" onClick={handleSubmit}>{editMode ? 'Salvar Alterações' : 'Registrar Lançamento'}</button>
         </section>
 
         

@@ -83,23 +83,17 @@
   font-weight: 400;
 }
 
-.edit-btn {
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  
-}
 
 .action {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: flex-end;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: 
+    "b1 ."
+    "b2 b3";
 }
 
 .modal-btn {
   margin-top: 0.75rem;
-  background: var(--primary);
   color: var(--colored-text);
   border: none;
   border-radius: 8px;
@@ -111,6 +105,27 @@
   align-items: center;  
   gap: 0.4rem;
   justify-content: center;
+}
+
+.btn-muted {
+    background-color: var(--bg-dark);
+    grid-area: b2;
+    width: max-content;
+}
+
+.btn-delete {
+    background-color: var(--danger);
+    color: var(--bg);
+    grid-area: b1;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-save {
+    background-color: var(--primary);
+    grid-area: b3;
+    color: var(--bg);
+    white-space: nowrap;
 }
 
 .modal-btn:hover {
