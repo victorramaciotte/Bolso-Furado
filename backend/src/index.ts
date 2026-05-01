@@ -101,7 +101,7 @@ app.post('/goals', async (req, res) => {
         target_amount, 
         current_amount, 
         initial_amount, 
-        ...(deadline && { deadline: new Date(deadline) }),
+        deadline: deadline? new Date(deadline + 'T00:00:00') : null,
     }
     });
     
@@ -124,7 +124,7 @@ app.put('/goals/:id', async (req, res) => {
             target_amount, 
             current_amount, 
             initial_amount, 
-            ...(deadline && { deadline: new Date(deadline) }),
+            deadline: deadline? new Date(deadline + 'T00:00:00') : null,
         }
   });
   

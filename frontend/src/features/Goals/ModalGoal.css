@@ -1,0 +1,79 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-box {
+  background: var(--bg);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 440px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.goal-action {
+    grid-template-columns: auto 1fr;
+    display: grid;
+    grid-template-areas: 
+    "b1 ."
+    "b2 b3";
+    align-items: flex-end;
+    column-gap: 1rem ;
+}
+
+.goal-modal-btn {
+  margin-top: 0.75rem;
+  color: var(--colored-text);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;        
+  align-items: center;  
+  justify-content: center;
+  gap: .4rem
+}
+
+.btn-muted {
+    background-color: var(--bg-dark);
+    grid-area: b2;
+    width: max-content;
+}
+
+.btn-delete {
+    background-color: var(--danger);
+    color: var(--bg);
+    grid-area: b1;
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-save {
+    background-color: var(--primary);
+    grid-area: b3;
+    color: var(--bg);
+    white-space: nowrap;
+}

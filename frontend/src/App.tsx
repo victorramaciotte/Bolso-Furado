@@ -5,12 +5,16 @@ import FinanceView from './views/FinanceView'
 import GoalsView from './views/GoalsView'
 import FAB from './components/FAB'
 import type { EntryData } from './features/Entries/ListEntries'
+import type { GoalData } from './features/Goals/ListGoals'
 
 function App() {
   const isMobile = useIsMobile()
   const [activeTab, setActiveTab] = useState('finance')
   const [openModal, setOpenModal] = useState(false)
+  const [openGoalModal, setOpenGoalModal] = useState(false)
   const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
+  const [editingGoal, setEditingGoal] = useState<GoalData | null>(null)
+  
   
   return (
     <>
@@ -23,7 +27,12 @@ function App() {
                                           editingEntry={editingEntry}
                                           setEditingEntry={setEditingEntry}
                                           />}
-          {activeTab === 'goals' && <GoalsView/>}
+          {activeTab === 'goals' && <GoalsView 
+                                          openModal={openGoalModal}
+                                          setOpenModal={setOpenGoalModal}
+                                          editingGoal={editingGoal}
+                                          setEditingGoal={setEditingGoal}
+                                          />}
         </main>
         <nav className='menu'>
           <div>
@@ -32,8 +41,13 @@ function App() {
           </div>
           
           <FAB onClick={() => {
-                setEditingEntry(null); 
-                setOpenModal(true);
+                if (activeTab === 'finance') {
+                  setEditingEntry(null)
+                  setOpenModal(true)
+                } else if (activeTab === 'goals') {
+                  setOpenGoalModal(true) 
+                  setEditingGoal(null)
+                }
                 }}></FAB>
         </nav>
         </section>
