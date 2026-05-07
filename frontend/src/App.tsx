@@ -3,6 +3,7 @@ import './App.css'
 import { useState } from 'react'
 import FinanceView from './views/FinanceView'
 import GoalsView from './views/GoalsView'
+import Dashboard from './views/Dashboard'
 import FAB from './components/FAB'
 import type { EntryData } from './features/Entries/ListEntries'
 import type { GoalData } from './features/Goals/ListGoals'
@@ -53,7 +54,9 @@ function App() {
         </section>
       ) : (
 
-        <span>You're on desktop WOW!!</span>
+        <>
+        <Dashboard></Dashboard>
+        </>
 
       )}
     </>

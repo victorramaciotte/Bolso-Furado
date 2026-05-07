@@ -4,7 +4,7 @@ import ModalGoal from "../features/Goals/ModalGoal"
 import './FinanceView.css'
 
   
-  interface Props {
+ export interface Props {
     openModal: boolean
     setOpenModal: (value: boolean) => void
     editingGoal: GoalData | null
@@ -31,7 +31,7 @@ import './FinanceView.css'
     }
   
     return (
-      <div>
+      <div className="list-wrapper">
   
           <ListGoals key={reload} onEdit={openEditing}/>
   
