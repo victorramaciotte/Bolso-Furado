@@ -25,7 +25,7 @@ function Entry({ name, value, type, source, reason, status, recurrence, date, en
   const isIncome = type === 'entrada'
 
   return (
-    <div className={`container ${toggle ? 'expanded' : ''}`} onClick={onToggle}>
+    <div className={`entry-container ${toggle ? 'expanded' : ''}`} onClick={onToggle}>
         {toggle ? (
             <section>
                     <div className='entry-header'>

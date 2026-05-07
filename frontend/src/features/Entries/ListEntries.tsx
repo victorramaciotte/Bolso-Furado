@@ -43,26 +43,29 @@ export default function ListEntries({ onEdit }: Props) {
   if (loading) return <p className="loading-list">Carregando...</p>
 
   return (
-    <ul className="list-entries">
-    {entries.map(entry => (
-      <Entry
-        key={entry.id}
-        name={entry.name}
-        value={entry.value}
-        type={entry.type}
-        source={entry.source}
-        reason={entry.reason}
-        status={entry.status}
-        recurrence={entry.recurrence}
-        date={entry.date}
-        endDate={entry.endDate}
-        category_id={entry.category_id}
-        category={entry.category}
-        toggle={toggle === entry.id}
-        onEdit={() => onEdit(entry)}
-        onToggle={() => setToggle(prev => prev === entry.id ? null : entry.id)}
-      />
-    ))}
-  </ul>
+    <div className="list-wrapper">
+      <ul className="list-entries">
+        {entries.map(entry => (
+          <Entry
+            key={entry.id}
+            name={entry.name}
+            value={entry.value}
+            type={entry.type}
+            source={entry.source}
+            reason={entry.reason}
+            status={entry.status}
+            recurrence={entry.recurrence}
+            date={entry.date}
+            endDate={entry.endDate}
+            category_id={entry.category_id}
+            category={entry.category}
+            toggle={toggle === entry.id}
+            onEdit={() => onEdit(entry)}
+            onToggle={() => setToggle(prev => prev === entry.id ? null : entry.id)}
+          />
+        ))}
+      </ul>
+    </div>
+    
   )
 }

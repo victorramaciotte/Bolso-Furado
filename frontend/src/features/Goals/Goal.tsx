@@ -61,12 +61,12 @@ function Goal({ name, initial_amount, target_amount, current_amount, deadline, t
                 <div className='goal-header'>
                     <div className='description'>{name}</div>
                     <div style={{display:'flex', justifyContent: 'flex-end'}}>
-                        <span className="icon-wrapper" onClick={(e) => { e.stopPropagation(); onEdit(); }} style={{justifyContent: 'flex-end'}}>
+                        <span className="icon-wrapper" onClick={(e) => { e.stopPropagation(); onEdit(); }}>
                             <i className="fi fi-br-edit"></i>
                         </span>
                     </div>
-                    
                 </div>
+
                 <span className='current-amount'>
                     <p className='currency'>R$</p>
                     <p> {current_amount?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
