@@ -44,7 +44,8 @@ export default function ListEntries({ onEdit }: Props) {
 
   return (
     <div className="list-wrapper">
-      <ul className="list-entries">
+      {entries.length > 0? (
+        <ul className="list-entries">
         {entries.map(entry => (
           <Entry
             key={entry.id}
@@ -65,6 +66,12 @@ export default function ListEntries({ onEdit }: Props) {
           />
         ))}
       </ul>
+      ) : (
+        <div className="empty-list">
+          <p>Nenhum lançamento encontrado. Registre algo novo!</p>
+        </div>
+      )}
+      
     </div>
     
   )

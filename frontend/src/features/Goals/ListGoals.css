@@ -14,3 +14,14 @@
   text-align: center;
   color: var(--bg-dark);
 }
+
+.empty-list {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-muted);
+    width: 60%;
+    margin: auto;
+}

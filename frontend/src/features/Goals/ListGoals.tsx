@@ -19,14 +19,14 @@ interface Props {
 
 
 function ListGoals({ onEdit }: Props) {
-  const [entries, setEntries] = useState<GoalData[]>([])
+  const [goals, setGoals] = useState<GoalData[]>([])
   const [loading, setLoading] = useState(true)
   const [toggle, setToggle] = useState<number | null>(null)
 
   useEffect(() => {
     getGoals()
       .then(data => {
-        setEntries(data)
+        setGoals(data)
         setLoading(false)
       })
   }, [])
@@ -34,21 +34,30 @@ function ListGoals({ onEdit }: Props) {
   if (loading) return <p className="loading-list">Carregando...</p>
 
   return (
-    <ul className="list-goals">
-    {entries.map(goal => (
-      <Goal
-        key={goal.id}
-        name={goal.name}
-        current_amount={goal.current_amount}
-        initial_amount={goal.initial_amount}
-        target_amount={goal.target_amount}
-        deadline={goal.deadline}
-        toggle={toggle === goal.id}
-        onEdit={() => onEdit(goal)}
-        onToggle={() => setToggle(prev => prev === goal.id ? null : goal.id)}
-      />
-    ))}
-  </ul>
+    <>
+        {goals.length > 0 ? (
+            <ul className="list-goals">
+                {goals.map(goal => (
+                <Goal
+                    key={goal.id}
+                    name={goal.name}
+                    current_amount={goal.current_amount}
+                    initial_amount={goal.initial_amount}
+                    target_amount={goal.target_amount}
+                    deadline={goal.deadline}
+                    toggle={toggle === goal.id}
+                    onEdit={() => onEdit(goal)}
+                    onToggle={() => setToggle(prev => prev === goal.id ? null : goal.id)}
+                />
+                ))}
+            </ul>
+        ) : (
+            <div className="empty-list">
+            <p>Nenhuma meta encontrada. Crie uma nova!</p>
+            </div>
+        )}
+    </>
+    
   )
 }
 export default ListGoals
