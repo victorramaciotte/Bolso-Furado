@@ -79,10 +79,10 @@ function Auth({ onLogin }: Props) {
           <input name="email" value={form.email} onChange={handleChange}/>
 
           <label>Senha:</label>
-          <input name="password" value={form.password} onChange={handleChange}/>
+          <input type="password" name="password" value={form.password} onChange={handleChange}/>
 
           <label>Repetir senha:</label>
-          <input name="password" value={form.confirm_password} onChange={handleChange}/>
+          <input type="password" name="password" value={form.confirm_password} onChange={handleChange}/>
 
           
           <button className="login" onClick={handleSubmit}>Cadastrar</button>
@@ -100,7 +100,7 @@ function Auth({ onLogin }: Props) {
           <input name="email" value={form.email} onChange={handleChange}/>
 
           <label>Senha:</label>
-          <input name="password" value={form.password} onChange={handleChange}/>
+          <input type="password" name="password" value={form.password} onChange={handleChange}/>
 
           <span>
             <button className="login" onClick={handleSubmit}>Login</button>
