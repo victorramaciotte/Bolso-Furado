@@ -1,0 +1,56 @@
+body {
+    font-size: 1rem;
+}
+
+.auth-wrapper {
+    background-color: var(--bg-dark);
+    width: 100%;
+    padding: 3rem;
+}
+
+input, button, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.auth-form {
+    display: grid;
+    gap: 1rem;
+
+    input {
+        border-radius: .5rem;
+        border: solid 1px var(--border-muted);
+        line-height: 2rem;
+    }
+}
+
+.login {
+    border: none;
+    background-color: var(--primary);
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem;
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.login:hover {
+    background-color: var(--primary-dark);
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: .5rem;
+
+    button {
+        border: none;
+        background-color: transparent;
+    }
+
+    button:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
+}

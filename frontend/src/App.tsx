@@ -7,14 +7,20 @@ import Dashboard from './views/Dashboard'
 import FAB from './components/FAB'
 import type { EntryData } from './features/Entries/ListEntries'
 import type { GoalData } from './features/Goals/ListGoals'
+import AuthView from './views/AuthView'
 
 function App() {
   const isMobile = useIsMobile()
+  const [token, setToken] = useState(localStorage.getItem('token'))
   const [activeTab, setActiveTab] = useState('finance')
   const [openModal, setOpenModal] = useState(false)
   const [openGoalModal, setOpenGoalModal] = useState(false)
   const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
   const [editingGoal, setEditingGoal] = useState<GoalData | null>(null)
+
+  if (!token) {
+    return <AuthView onLogin={(t) => { localStorage.setItem('token', t); setToken(t) }} />
+  }
   
   
   return (
