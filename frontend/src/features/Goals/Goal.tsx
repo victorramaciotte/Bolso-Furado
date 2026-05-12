@@ -122,7 +122,7 @@ function Goal({ id, name, initial_amount, target_amount, current_amount, deadlin
                                     <button className='red-btn' onClick={() => { setShowConfirm(false); updateAmount() }}>Confirmar retirada</button>
                                 </div>
                             </div>
-)}
+                        )}
                     </div>
         )}
 
