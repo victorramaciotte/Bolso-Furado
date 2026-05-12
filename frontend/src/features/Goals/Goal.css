@@ -157,3 +157,10 @@ i {
     height: 1.5em;
     border-radius: 20px;
 }
+
+.amount-action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 1rem;
+    gap: 1rem;
+}

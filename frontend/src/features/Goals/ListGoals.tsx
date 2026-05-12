@@ -31,6 +31,10 @@ function ListGoals({ onEdit }: Props) {
       })
   }, [])
 
+  function refresh() {
+    getGoals().then(data => setGoals(data))
+}
+
   if (loading) return <p className="loading-list">Carregando...</p>
 
   return (
@@ -40,6 +44,7 @@ function ListGoals({ onEdit }: Props) {
                 {goals.map(goal => (
                 <Goal
                     key={goal.id}
+                    id={goal.id}
                     name={goal.name}
                     current_amount={goal.current_amount}
                     initial_amount={goal.initial_amount}
@@ -47,6 +52,7 @@ function ListGoals({ onEdit }: Props) {
                     deadline={goal.deadline}
                     toggle={toggle === goal.id}
                     onEdit={() => onEdit(goal)}
+                    onUpdate={refresh}
                     onToggle={() => setToggle(prev => prev === goal.id ? null : goal.id)}
                 />
                 ))}

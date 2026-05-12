@@ -32,7 +32,7 @@ export default function AccountCard({ user, onLogout }: Props) {
 
         {showConfirm && (
         <div className="modal-overlay" onClick={() => setShowConfirm(false)}>
-            <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <div className="confirm-modal-box" onClick={e => e.stopPropagation()}>
                 <p>Deseja sair?</p>
                 <button className='red-btn' onClick={onLogout}>Confirmar</button>
                 <button className='muted-btn' onClick={() => setShowConfirm(false)}>Cancelar</button>
