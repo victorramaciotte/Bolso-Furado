@@ -82,3 +82,23 @@ body {
   --primary:       #40aabf;
   --primary-light: #8fd0dc;
 }
+
+.red-btn {
+  background-color: var(--danger);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  border: none;
+  border-radius: .5rem;
+  padding: .5rem;
+}
+
+.muted-btn {
+  background-color: var(--border);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  border: none;
+  border-radius: .5rem;
+  padding: .5rem;
+}

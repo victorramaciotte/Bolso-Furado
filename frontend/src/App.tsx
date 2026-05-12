@@ -28,6 +28,13 @@ function App() {
     }} />
       
   }
+
+  function handleLogout() {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setToken(null)
+    setUser({})
+  }
   
   
   return (
@@ -41,6 +48,7 @@ function App() {
                                           editingEntry={editingEntry}
                                           setEditingEntry={setEditingEntry}
                                           user={user}
+                                          onLogout={handleLogout}
                                           />}
           {activeTab === 'goals' && <GoalsView 
                                           openModal={openGoalModal}

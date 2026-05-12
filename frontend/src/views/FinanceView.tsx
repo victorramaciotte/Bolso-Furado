@@ -9,6 +9,7 @@ interface Props {
   openModal: boolean
   setOpenModal: (value: boolean) => void
   editingEntry: EntryData | null
+  onLogout: () => void
   setEditingEntry: (value: EntryData | null) => void
   user: {
     id: number
@@ -17,7 +18,7 @@ interface Props {
   }
 }
 
-function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, user} : Props) {
+function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, user, onLogout} : Props) {
   const [reload, setReload] = useState(0)
 
   function closeModal() {
@@ -38,7 +39,7 @@ function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, us
 
   return (
     <div>
-        <AccountCard user={user}/>
+        <AccountCard user={user} onLogout={onLogout}/>
         <div className='menu-container'>
             <button>Relatórios</button>
         </div>
