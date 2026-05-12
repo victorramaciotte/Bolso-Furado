@@ -2,12 +2,20 @@ import { useState } from "react"
 import ListEntries, { type EntryData } from "../features/Entries/ListEntries"
 import ModalEntry from "../features/Entries/ModalEntry"
 import './Dashboard.css'
-import GoalsView, { type Props} from "./GoalsView"
+import GoalsView from "./GoalsView"
 import type { GoalData } from "../features/Goals/ListGoals"
+import AccountCard from "./AccountCard"
 
+interface Props {
+    user: {
+        id: number
+        name: string
+        email: string
+    }
+    onLogout: () => void
+}
 
-
-export default function Dashboard() {
+export default function Dashboard({ user, onLogout }: Props) {
     const [openModal, setOpenModal] = useState(false)
     const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
     const [reload, setReload] = useState(0)
@@ -21,7 +29,9 @@ export default function Dashboard() {
 
   return (
     <div className='dashboard'>
-          <div className='account-card'></div>
+          <div className='account-card'>
+            <AccountCard user={user} onLogout={onLogout}/>
+          </div>
           <div className='entries'>
             <div className="div-header">
                 <span>Lançamentos</span>

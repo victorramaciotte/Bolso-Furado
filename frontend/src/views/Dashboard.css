@@ -17,7 +17,6 @@
 
 .account-card {
   grid-area: card;
-  background-color: var(--border-muted);
 }
 
 .entries {

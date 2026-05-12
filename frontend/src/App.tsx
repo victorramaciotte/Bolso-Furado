@@ -77,7 +77,7 @@ function App() {
       ) : (
 
         <>
-        <Dashboard></Dashboard>
+        <Dashboard user={user} onLogout={handleLogout}></Dashboard>
         </>
 
       )}
