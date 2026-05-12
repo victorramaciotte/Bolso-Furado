@@ -12,6 +12,7 @@ interface Props {
 
 function ModalGoal({ onClose, onSuccess, goal}: Props) {
     const editMode = !!goal
+    const [showConfirm, setShowConfirm] = useState(false)
       const [form, setForm] = useState({
         name: goal?.name ?? '',
         target_amount: goal?.target_amount.toString() ?? '',
@@ -145,10 +146,20 @@ function ModalGoal({ onClose, onSuccess, goal}: Props) {
 
                 {editMode && (
                 <section className='edit-btn'>
-                    <button className="goal-modal-btn btn-delete" onClick={(e) => { e.stopPropagation(); handleDelete(); }}>
+                    <button className="goal-modal-btn btn-delete" onClick={(e) => { e.stopPropagation(); setShowConfirm(true); }}>
                         <i className="fi fi-br-trash"></i>
                         Remover
                     </button>
+                    {showConfirm && (
+                            <div className="modal-overlay" onClick={() => setShowConfirm(false)}>
+                                <div className="confirm-modal-box" onClick={e => e.stopPropagation()}>
+                                    <p className="title">Tem certeza que deseja excluir esta meta?</p>
+                                    <p>Todas as contribuições registradas serão perdidas e essa ação não pode ser desfeita</p>
+                                    <button className='muted-btn' onClick={() => setShowConfirm(false)}>Cancelar</button>
+                                    <button className='red-btn' onClick={() => { setShowConfirm(false); handleDelete() }}>Sim, excluir</button>
+                                </div>
+                            </div>
+                        )}
                 </section>
                 
             )}

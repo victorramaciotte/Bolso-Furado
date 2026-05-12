@@ -17,6 +17,7 @@ export interface CategoryData {
 
 export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
   const [categories, setCategories] = useState<CategoryData[]>([])
+  const [showConfirm, setShowConfirm] = useState(false)
   const editMode = !!entry
   const [form, setForm] = useState({
     name: entry?.name ?? '',
@@ -289,13 +290,22 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
         <section className='action'>
           <button className="modal-btn btn-muted" onClick={onClose}>Cancelar</button> 
             {editMode && (
-              <button className="modal-btn btn-delete" onClick={(e) => { e.stopPropagation(); handleDelete(); }}>
+              <button className="modal-btn btn-delete" onClick={(e) => { e.stopPropagation();  setShowConfirm(true); }}>
                 <i className="fi fi-br-trash"></i>
                 Remover
               </button>
             
           )}
-
+          {showConfirm && (
+                            <div className="modal-overlay" onClick={() => setShowConfirm(false)}>
+                                <div className="confirm-modal-box" onClick={e => e.stopPropagation()}>
+                                    <p className="title">Tem certeza que deseja excluir este registro?</p>
+                                    <p>Essa ação não pode ser desfeita.</p>
+                                    <button className='muted-btn' onClick={() => setShowConfirm(false)}>Cancelar</button>
+                                    <button className='red-btn' onClick={() => { setShowConfirm(false); handleDelete() }}>Sim, excluir</button>
+                                </div>
+                            </div>
+                        )}
           <button className="modal-btn btn-save" onClick={handleSubmit}>{editMode ? 'Salvar Alterações' : 'Registrar Lançamento'}</button>
         </section>
 
