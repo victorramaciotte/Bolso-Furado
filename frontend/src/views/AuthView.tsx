@@ -3,7 +3,7 @@ import { login, register} from "../services/authService"
 import './AuthView.css'
 
 interface Props {
-  onLogin: (token: string) => void
+  onLogin: (token: string, user: any) => void
 }
 
 function Auth({ onLogin }: Props) {
@@ -28,15 +28,28 @@ function Auth({ onLogin }: Props) {
   async function handleSubmit() {
     let newErrors = {
       email: '',
-      password: ''
+      password: '',
+      confirm_password: ''
     }
 
     if (!form.email) {
       newErrors.email = 'Digite seu email!'
     }
+
+    if (!form.email.includes('@')) {
+      newErrors.email = 'Email inválido'
+    }
   
     if (!form.password) {
       newErrors.password = 'Digite sua senha!'
+    }
+
+    if (form.password.length < 6) {
+      newErrors.password = 'A senha deve ter no mínimo 6 caracteres'
+    }
+
+    if (isRegister && form.password !== form.confirm_password) {
+      newErrors.confirm_password = 'As senhas não coincidem'
     }
 
     setErrors(newErrors)
@@ -48,11 +61,13 @@ function Auth({ onLogin }: Props) {
       if(isRegister){
         const data = await register(form.name, form.email, form.password)
         localStorage.setItem('token', data.token)
-        onLogin(data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
+        onLogin(data.token, data.user)
       } else {
         const data = await login(form.email, form.password)
         localStorage.setItem('token', data.token)
-        onLogin(data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
+        onLogin(data.token, data.user)
       }
       
     } catch (err: any) {

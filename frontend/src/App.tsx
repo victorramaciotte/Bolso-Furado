@@ -12,6 +12,7 @@ import AuthView from './views/AuthView'
 function App() {
   const isMobile = useIsMobile()
   const [token, setToken] = useState(localStorage.getItem('token'))
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') ?? '{}'))
   const [activeTab, setActiveTab] = useState('finance')
   const [openModal, setOpenModal] = useState(false)
   const [openGoalModal, setOpenGoalModal] = useState(false)
@@ -19,7 +20,13 @@ function App() {
   const [editingGoal, setEditingGoal] = useState<GoalData | null>(null)
 
   if (!token) {
-    return <AuthView onLogin={(t) => { localStorage.setItem('token', t); setToken(t) }} />
+    return <AuthView onLogin={(t, u) => { 
+      localStorage.setItem('token', t); 
+      localStorage.setItem('user', JSON.stringify(u))
+      setToken(t) 
+      setUser(u)
+    }} />
+      
   }
   
   
@@ -33,6 +40,7 @@ function App() {
                                           setOpenModal={setOpenModal}
                                           editingEntry={editingEntry}
                                           setEditingEntry={setEditingEntry}
+                                          user={user}
                                           />}
           {activeTab === 'goals' && <GoalsView 
                                           openModal={openGoalModal}

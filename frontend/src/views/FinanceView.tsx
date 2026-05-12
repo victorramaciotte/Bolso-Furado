@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ListEntries from '../features/Entries/ListEntries'
 import ModalEntry from '../features/Entries/ModalEntry'
+import AccountCard from './AccountCard'
 import type { EntryData } from '../features/Entries/ListEntries'
 import './FinanceView.css'
 
@@ -9,9 +10,14 @@ interface Props {
   setOpenModal: (value: boolean) => void
   editingEntry: EntryData | null
   setEditingEntry: (value: EntryData | null) => void
+  user: {
+    id: number
+    name: string
+    email: string
+  }
 }
 
-function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry} : Props) {
+function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, user} : Props) {
   const [reload, setReload] = useState(0)
 
   function closeModal() {
@@ -32,7 +38,7 @@ function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry} : 
 
   return (
     <div>
-      
+        <AccountCard user={user}/>
         <div className='menu-container'>
             <button>Relatórios</button>
         </div>
@@ -41,11 +47,11 @@ function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry} : 
 
         
         {openModal && (
-          <ModalEntry
+            <ModalEntry
             onClose={closeModal}
             onSuccess={closeAndReload}
             entry={editingEntry ?? undefined} 
-          />
+            />
         )}
 
       
