@@ -102,3 +102,23 @@ body {
   border-radius: .5rem;
   padding: .5rem;
 }
+
+.muted-btn:hover {
+  cursor: pointer;
+  background-color: var(--border-muted);
+}
+
+.primary-btn {
+  background-color: var(--primary);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  border: none;
+  border-radius: .5rem;
+  padding: .5rem;
+}
+
+.primary-btn:hover {
+  cursor: pointer;
+  background-color: var(--primary-dark);
+}
