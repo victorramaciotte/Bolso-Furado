@@ -6,7 +6,9 @@ Aplicativo web de **finanças pessoais** com foco em dispositivos móveis (Mobil
 
 ## 📌 Sobre o Projeto
 
-O Bolso Furado funciona como uma carteira digital onde o usuário pode visualizar, registrar e organizar seus lançamentos financeiros (entradas e saídas) de forma clara e intuitiva. O design segue uma paleta neutra em tons de cinza frio, priorizando legibilidade e simplicidade.
+O Bolso Furado é uma carteira digital onde o usuário pode registrar, visualizar e organizar seus lançamentos financeiros (entradas e saídas), definir metas de poupança e acompanhar o progresso. O sistema conta com autenticação própria, categorização de lançamentos e suporte a recorrência.
+
+O design segue uma paleta baseada em teal com tons de cinza frio, com suporte a **light mode** e **dark mode**, priorizando legibilidade e simplicidade.
 
 ---
 
@@ -15,39 +17,66 @@ O Bolso Furado funciona como uma carteira digital onde o usuário pode visualiza
 ### Front-end
 - [React](https://react.dev/) + [Vite](https://vitejs.dev/)
 - TypeScript
-- CSS Modular (por componente)
+- [Axios](https://axios-http.com/) — cliente HTTP
+- [react-number-format](https://s-yadav.github.io/react-number-format/) — formatação monetária
 - [Flaticon Uicons](https://www.flaticon.com/uicons) — biblioteca de ícones
+- CSS por componente
 
 ### Back-end
 - [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/)
-- [Prisma ORM](https://www.prisma.io/)
-- Banco de dados relacional via Prisma
+- TypeScript
+- [Prisma ORM](https://www.prisma.io/) — banco de dados SQLite
+- [bcrypt](https://www.npmjs.com/package/bcrypt) — hash de senhas
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) — autenticação via JWT
+- [cors](https://www.npmjs.com/package/cors) — controle de origens
 
 ---
 
 ## 📁 Estrutura do Projeto
 
 ```
-📁 front/
+📁 frontend/
 ├── src/
+│   ├── components/
+│   │   └── FAB.tsx
+│   ├── constants/
+│   │   └── endpoints.ts
+│   ├── contexts/
 │   ├── features/
-│   │   └── Lancamentos/
-│   │       ├── Lancamento.tsx
-│   │       ├── Lancamento.css
-│   │       ├── ListaLancamentos.tsx
-│   │       ├── ListaLancamentos.css
-│   │       ├── ModalNovoLancamento.tsx
-│   │       └── ModalNovoLancamento.css
+│   │   ├── Entries/
+│   │   │   ├── Entry.tsx / Entry.css
+│   │   │   ├── ListEntries.tsx / ListEntries.css
+│   │   │   └── ModalEntry.tsx / ModalEntry.css
+│   │   └── Goals/
+│   │       ├── Goal.tsx / Goal.css
+│   │       ├── ListGoals.tsx
+│   │       └── ModalGoal.tsx
+│   ├── hooks/
+│   │   └── useIsMobile.ts
+│   ├── services/
+│   │   ├── api.ts
+│   │   ├── authService.ts
+│   │   ├── financeService.ts
+│   │   └── goalService.ts
+│   ├── views/
+│   │   ├── AccountCard.tsx
+│   │   ├── AuthView.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── FinanceView.tsx
+│   │   ├── GoalsView.tsx
+│   │   └── AnalyticsView.tsx
 │   ├── App.tsx
 │   ├── App.css
 │   └── main.tsx
 └── .env
 
-📁 back/
+📁 backend/
 ├── src/
 │   ├── lib/
 │   │   └── prisma.ts
-│   └── server.ts
+│   ├── types/
+│   │   └── express.d.ts
+│   └── index.ts
 ├── prisma/
 │   └── schema.prisma
 └── .env
@@ -59,12 +88,12 @@ O Bolso Furado funciona como uma carteira digital onde o usuário pode visualiza
 
 ### Pré-requisitos
 - Node.js instalado
-- Gerenciador de pacotes (npm ou yarn)
+- npm ou yarn
 
 ### Back-end
 
 ```bash
-cd back
+cd backend
 npm install
 npx prisma migrate dev
 npm run dev
@@ -75,7 +104,7 @@ O servidor iniciará em `http://localhost:3000`.
 ### Front-end
 
 ```bash
-cd front
+cd frontend
 npm install
 npm run dev
 ```
@@ -84,61 +113,115 @@ O app iniciará em `http://localhost:5173`.
 
 ### Variáveis de Ambiente
 
-Crie um arquivo `.env` dentro da pasta `front/` com o seguinte conteúdo:
-
+**`frontend/.env`**
 ```env
 VITE_API_URL=http://localhost:3000
 ```
+
+**`backend/.env`**
+```env
+DATABASE_URL="file:./dev.db"
+JWT_SECRET=sua_chave_secreta_aqui
+```
+
+> Para gerar uma chave segura para o JWT:
+> ```bash
+> node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+> ```
 
 ---
 
 ## 🔌 Endpoints da API
 
+### Autenticação
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| GET | `/lancamentos` | Lista todos os lançamentos |
-| POST | `/lancamentos` | Cria um novo lançamento |
+| POST  | `/auth/register` | Registra novo usuário |
+| POST | `/auth/login` | Autentica e retorna token JWT |
 
-### Exemplo de corpo para POST `/lancamentos`
+> As demais rotas exigem o header: `Authorization: Bearer <token>`
 
-```json
-{
-  "nome": "Academia",
-  "valor": 120.00,
-  "tipo": "saida",
-  "status": "Pago",
-  "recorrencia": "2025-02-01",
-  "origem": "Salário",
-  "categoria": "Saúde",
-  "motivacao": "Necessidade"
-}
-```
+### Lançamentos
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/entries` | Lista lançamentos do usuário |
+| POST | `/entries` | Cria novo lançamento |
+| PUT | `/entries/:id` | Atualiza lançamento |
+| DELETE | `/entries/:id` | Remove lançamento |
+
+### Metas
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/goals` | Lista metas do usuário |
+| POST | `/goals` | Cria nova meta |
+| PUT | `/goals/:id` | Atualiza meta |
+| DELETE | `/goals/:id` | Remove meta |
+
+### Categorias
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/categories` | Lista categorias do usuário |
+| POST | `/categories` | Cria nova categoria |
+| PUT | `/categories/:id` | Atualiza categoria |
+| DELETE | `/categories/:id` | Remove categoria |
 
 ---
 
-## 🗃️ Model do Banco de Dados
+## 🗃️ Modelos do Banco de Dados
 
 ```prisma
-model Lancamento {
+model User {
+  id         Int        @id @default(autoincrement())
+  name       String
+  email      String     @unique
+  password   String
+  entries    Entry[]
+  goals      Goal[]
+  categories Category[]
+}
+
+model Entry {
   id          Int       @id @default(autoincrement())
-  nome        String
-  valor       Float
-  origem      String?
-  tipo        String
-  motivacao   String?
+  name        String
+  value       Float
+  source      String?
+  type        String
+  reason      String?
   status      String
-  recorrencia String
-  data        DateTime  @default(now())
-  dataFR      DateTime?
-  categoria   String?
+  recurrence  String?
+  date        DateTime  @default(now())
+  endDate     DateTime?
+  category    Category  @relation(fields: [category_id], references: [id])
+  category_id Int
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
+model Goal {
+  id             Int       @id @default(autoincrement())
+  name           String
+  target_amount  Float
+  current_amount Float
+  initial_amount Float
+  deadline       DateTime?
+  user           User      @relation(fields: [userId], references: [id])
+  userId         Int
+}
+
+model Category {
+  id      Int     @id @default(autoincrement())
+  name    String
+  entries Entry[]
+  user    User    @relation(fields: [userId], references: [id])
+  userId  Int
 }
 ```
 
 ---
-
-
 
 ## 👨‍💻 Autores
 
+- [Victor Ramaciotte](https://github.com/victorramaciotte)
+- [Jemyma Matos](https://github.com/JKesly)
 
 Desenvolvido como projeto acadêmico no curso de **Sistemas de Informação**.
