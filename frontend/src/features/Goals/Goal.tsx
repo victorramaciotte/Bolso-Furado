@@ -62,7 +62,7 @@ function Goal({ id, name, initial_amount, target_amount, current_amount, deadlin
                     <div className='goal-header'>
                         <div className='description'>{name}</div>
                         <div style={{display:'flex', justifyContent: 'flex-end'}}>
-                        <span className="icon-wrapper" onClick={(e) => { e.stopPropagation(); onEdit(); }} style={{justifyContent: 'flex-end'}}>
+                        <span className="icon-wrapper" onClick={(e) => { e.stopPropagation(); onEdit(); }} >
                             <i className="fi fi-br-edit"></i>
                         </span>
                     </div>

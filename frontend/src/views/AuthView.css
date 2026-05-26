@@ -16,6 +16,7 @@ input, button, select, textarea {
 .auth-form {
     display: grid;
     gap: 1rem;
+    margin: auto;
 
     input {
         border-radius: .5rem;
