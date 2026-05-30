@@ -43,7 +43,7 @@ export default function ListEntries({ onEdit }: Props) {
   if (loading) return <p className="loading-list">Carregando...</p>
 
   return (
-    <div className="list-wrapper">
+    <div>
       {entries.length > 0? (
         <ul className="list-entries">
         {entries.map(entry => (

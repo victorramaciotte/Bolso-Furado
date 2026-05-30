@@ -1,7 +1,7 @@
 .entry-container {
     display: grid;
     width: 100%;
-    padding: 8px;
+    padding-bottom: 1rem;
     cursor: pointer;
     max-height: 5em;
     box-sizing: border-box;

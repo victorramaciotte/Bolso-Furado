@@ -40,7 +40,9 @@ export default function Dashboard({ user, onLogout }: Props) {
                     Novo Lançamento
                 </button>
             </div>
-            <ListEntries key={reload} onEdit={openEditing}/>
+            <div className="list-wrapper">
+                <ListEntries key={reload} onEdit={openEditing}/>
+            </div>
           </div>
           <div className='goals'>
             <div className="div-header">
