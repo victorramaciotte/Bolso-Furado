@@ -24,9 +24,29 @@
 
 .goal-header {
     display: grid;
-    grid-template-columns: 1fr 5em;
+    grid-template-columns: minmax(0, 1fr) 5em;
     width: 100%;
     gap: 0.5em;
+}
+
+.goal-info {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  color: var(--text-muted);
+  min-width: 0;
+}
+
+.goal-info p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .goal-info {
+    flex-direction: column;
+    gap: .25rem;
+  }
 }
 
 .details {

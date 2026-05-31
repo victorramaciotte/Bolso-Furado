@@ -70,7 +70,7 @@ function Goal({ id, name, initial_amount, target_amount, current_amount, deadlin
                     </div>
                     
                     <section  className='details'>
-                        <span style={{display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)'}}>
+                        <span className="goal-info">
                             <p><b>Objetivo:</b> {target_amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} </p>
                             {deadline? (<p><b>Até:</b> {new Date(deadline).toLocaleDateString('pt-BR')}</p>) : (null)}
                         </span>
