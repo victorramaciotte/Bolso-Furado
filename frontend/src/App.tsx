@@ -61,11 +61,11 @@ function App() {
           <div>
             <button className={`nav ${activeTab === 'finance' ? 'active' : ''}`} onClick={() => setActiveTab('finance')}>
               <i className="fi fi-sr-hand-holding-usd"></i>
-              Gestão
+              <span>Gestão</span>
             </button>
             <button className={`nav ${activeTab === 'goals' ? 'active' : ''}`} onClick={() => setActiveTab('goals')}>
               <i className="fi fi-sr-piggy-bank"></i>
-              Metas
+              <span>Metas</span>
             </button>
           </div>
           
