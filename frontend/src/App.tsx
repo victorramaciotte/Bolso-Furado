@@ -59,8 +59,14 @@ function App() {
         </main>
         <nav className='menu'>
           <div>
-            <button className={`nav ${activeTab === 'finance' ? 'active' : ''}`} onClick={() => setActiveTab('finance')}>Gestão</button>
-            <button className={`nav ${activeTab === 'goals' ? 'active' : ''}`} onClick={() => setActiveTab('goals')}>Metas</button>
+            <button className={`nav ${activeTab === 'finance' ? 'active' : ''}`} onClick={() => setActiveTab('finance')}>
+              <i className="fi fi-sr-hand-holding-usd"></i>
+              Gestão
+            </button>
+            <button className={`nav ${activeTab === 'goals' ? 'active' : ''}`} onClick={() => setActiveTab('goals')}>
+              <i className="fi fi-sr-piggy-bank"></i>
+              Metas
+            </button>
           </div>
           
           <FAB onClick={() => {
