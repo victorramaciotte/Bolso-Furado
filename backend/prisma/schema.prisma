@@ -8,9 +8,9 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
+  id         Int            @id @default(autoincrement())
   name       String
-  email      String     @unique
+  email      String         @unique
   password   String
   entries    Entry[]
   goals      Goal[]
@@ -18,8 +18,8 @@ model User {
 }
 
 model Entry {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int           @id @default(autoincrement())
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   name        String
   value       Float
@@ -28,15 +28,15 @@ model Entry {
   reason      String?
   status      String
   recurrence  String?   
-  date        DateTime @default(now())
+  date        DateTime      @default(now())
   endDate     DateTime?
-  category    Category @relation(fields: [category_id], references: [id])
+  category    Category      @relation(fields: [category_id], references: [id])
   category_id Int
 }
 
 model Goal {
-  id              Int      @id @default(autoincrement())
-  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              Int       @id @default(autoincrement())
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          Int
   name            String
   target_amount   Float 
@@ -46,10 +46,11 @@ model Goal {
 }
 
 model Category {
-  id          Int      @id @default(autoincrement())
-  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int
-  name        String
-  entries     Entry[]
+  id              Int       @id @default(autoincrement())
+  user            User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int?
+  name            String
+  normalizedName  String    @default("")
+  entries         Entry[]
 
 }

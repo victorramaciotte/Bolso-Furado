@@ -220,18 +220,53 @@ app.delete('/goals/:id', authMiddleware, async (req, res) => {
 //CATEGORIES//////////////////////////////////////////////////////////////////////
 // Rota para Listar
 app.get('/categories', authMiddleware, async (req, res) => {
-  const userId = req.userId!
-  const categories = await prisma.category.findMany({where: { userId }});
+  
+  const categories = await prisma.category.findMany({
+      where: { 
+        OR: [
+        { userId: null},      
+        { userId: req.userId!}
+      ] 
+    }
+  })
   res.json(categories);
 });
 
 // Rota para Criar
+function normalizeCategoryName(name: string) {
+  return name
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
 app.post('/categories', authMiddleware, async (req, res) => {
   console.log('body recebido:', req.body)
   try {
     const { name } = req.body;
+    const normalizedName = normalizeCategoryName(name)
     
-    const novo = await prisma.category.create({data: { name, user: { connect: { id: req.userId! } } }});
+    const exists = await prisma.category.findFirst({
+      where: {
+        normalizedName,
+        OR: [
+          { userId: null },        
+          { userId: req.userId! }  
+        ]
+      }
+    })
+
+    if (exists) {
+      return res.status(409).json({ error: 'Categoria já existe' });
+    }
+
+    const novo = await prisma.category.create({
+      data: {
+        name,
+        user: { connect: { id: req.userId! } }
+      }
+    })
     
     res.status(201).json(novo);
   } catch (err) {
