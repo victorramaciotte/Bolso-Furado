@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './ListEntries.css'
 import Entry from './Entry' 
 import { getEntries } from '../../services/financeService'
+import type { EntryFilterState } from './EntryFilters'
 
 export interface EntryData {
   id: number
@@ -25,9 +26,10 @@ export type CreateEntryData = Omit <EntryData, 'id' | 'category'>
 
 interface Props {
   onEdit: (entry: EntryData) => void
+  filters?: EntryFilterState
 }
 
-export default function ListEntries({ onEdit }: Props) {
+export default function ListEntries({ onEdit, filters }: Props) {
   const [entries, setEntries] = useState<EntryData[]>([])
   const [loading, setLoading] = useState(true)
   const [toggle, setToggle] = useState<number | null>(null)
@@ -42,11 +44,28 @@ export default function ListEntries({ onEdit }: Props) {
 
   if (loading) return <p className="loading-list">Carregando...</p>
 
+  const visibleEntries = entries.filter(entry => {
+  if (!filters) return true
+
+  const date = new Date(entry.date)
+
+  const matchesMonth =
+    filters.month === 'all' || date.getMonth() === filters.month
+
+  const matchesYear =
+    filters.year === 'all' || date.getFullYear() === filters.year
+
+  const matchesCategory =
+    filters.categoryId === 'all' || entry.category_id === filters.categoryId
+
+  return matchesMonth && matchesYear && matchesCategory
+})
+
   return (
     <div>
-      {entries.length > 0? (
+      {visibleEntries.length > 0? (
         <ul className="list-entries">
-        {entries.map(entry => (
+        {visibleEntries.map(entry => (
           <Entry
             key={entry.id}
             name={entry.name}

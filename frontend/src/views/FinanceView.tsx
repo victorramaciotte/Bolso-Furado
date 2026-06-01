@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ListEntries from '../features/Entries/ListEntries'
 import ModalEntry from '../features/Entries/ModalEntry'
 import AccountCard from './AccountCard'
 import type { EntryData } from '../features/Entries/ListEntries'
 import './FinanceView.css'
+import EntryFilters from '../features/Entries/EntryFilters'
+import type { EntryFilterState, CategoryOption  } from '../features/Entries/EntryFilters'
+import { getCategories } from '../services/financeService'
 
 interface Props {
   openModal: boolean
@@ -20,6 +23,23 @@ interface Props {
 
 function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, user, onLogout} : Props) {
   const [reload, setReload] = useState(0)
+  const [showFilters, setShowFilters] = useState(false)
+  const [categories, setCategories] = useState<CategoryOption[]>([])
+  const [filters, setFilters] = useState<EntryFilterState>({
+  month: 'all',
+  year: 'all',
+  categoryId: 'all'
+})
+  const [draftFilters, setDraftFilters] = useState(filters)
+
+  function applyFilters() {
+    setFilters(draftFilters)
+    setShowFilters(false)
+  }
+
+useEffect(() => {
+  getCategories().then(setCategories)
+}, [])
 
   function closeModal() {
   setOpenModal(false)
@@ -41,10 +61,19 @@ function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, us
     <div>
         <AccountCard user={user} onLogout={onLogout}/>
         <div className='menu-container'>
-            <button>Relatórios</button>
+            <button>
+              <i className="fi fi-br-chart-simple"></i>
+              Relatórios
+              </button>
+            <button>
+              <i className="fi fi-br-calendar"></i>
+            </button>
+            <button onClick={() => setShowFilters(prev => !prev)}>
+              <i className="fi fi-br-settings-sliders"></i>
+            </button>
         </div>
 
-        <ListEntries key={reload} onEdit={openEditing}/>
+        <ListEntries key={reload} onEdit={openEditing} filters={filters}/>
 
         
         {openModal && (
@@ -53,6 +82,18 @@ function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, us
             onSuccess={closeAndReload}
             entry={editingEntry ?? undefined} 
             />
+        )}
+
+        {showFilters && (
+          <div className="filter-overlay" onClick={() => setShowFilters(false)}>
+            <EntryFilters
+              filters={draftFilters}
+              onChange={setDraftFilters}
+              categories={categories}
+              onApply={applyFilters}
+              onClose={() => setShowFilters(false)}
+            />
+          </div>
         )}
 
       
