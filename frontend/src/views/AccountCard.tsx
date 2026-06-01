@@ -28,7 +28,14 @@ export default function AccountCard({ user, onLogout }: Props) {
             </span>
            <span className='triangle'></span> 
         </span>
-        <div className='card'></div>
+        <div className='card'>
+            <span className='label'>Saldo</span>
+            <span className='balance'>$$$</span>
+            <button>
+              <i className="fi fi-br-pencil"></i>
+            </button>
+            <span className='budget'>Orçamento: $$$</span>
+        </div>
 
         {showConfirm && (
         <div className="modal-overlay" onClick={() => setShowConfirm(false)}>
