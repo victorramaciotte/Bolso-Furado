@@ -177,7 +177,7 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
                 <input
                   type="radio"
                   name="type"
-                  value="entrada"
+                  value="income"
                   onChange={handleChange}
                 /> Receita
               </label>
@@ -186,7 +186,7 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
                 <input
                 type="radio"
                 name="type"
-                value="saida"
+                value="expense"
                 onChange={handleChange}
               /> Despesa
             </label>

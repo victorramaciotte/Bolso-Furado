@@ -87,8 +87,8 @@ i {
   justify-content: center;
 }
 
-.icon-entrada { color: #2e7d32; }
-.icon-saida   { color: #c62828; }
+.icon-income { color: #2e7d32; }
+.icon-expense   { color: #c62828; }
 
 .positivo { color: #2e7d32; font-weight: 700; font-size: 0.9em; }
 .negativo { color: #c62828; font-weight: 700; font-size: 0.9em; }

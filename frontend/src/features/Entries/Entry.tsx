@@ -22,7 +22,7 @@ interface EntryProps {
 }
 
 function Entry({ name, value, type, source, reason, status, recurrence, date, endDate, category, toggle, onEdit, onToggle}: EntryProps) {
-  const isIncome = type === 'entrada'
+  const isIncome = type === 'income'
 
   return (
     <div className={`entry-container ${toggle ? 'expanded' : ''}`} onClick={onToggle}>
@@ -30,7 +30,7 @@ function Entry({ name, value, type, source, reason, status, recurrence, date, en
             <section>
                     <div className='entry-header'>
                         <div className='entry-icon-container'> 
-                            <div className={`entry-icon-wrapper ${isIncome ? 'icon-entrada' : 'icon-saida'}`}>
+                            <div className={`entry-icon-wrapper ${isIncome ? 'icon-income' : 'icon-expense'}`}>
                                 <i className={`fi fi-rs-${isIncome ? 'arrow-small-up' : 'arrow-small-down'}`}></i>
                             </div>
                         </div>
@@ -60,7 +60,7 @@ function Entry({ name, value, type, source, reason, status, recurrence, date, en
         ) : (
             <div className='entry-header'>
                 <div className='entry-icon-container'> 
-                    <div className={`entry-icon-wrapper ${isIncome ? 'icon-entrada' : 'icon-saida'}`}>
+                    <div className={`entry-icon-wrapper ${isIncome ? 'icon-income' : 'icon-expense'}`}>
                         <i className={`fi fi-rs-${isIncome ? 'arrow-small-up' : 'arrow-small-down'}`}></i>
                     </div>
                 </div>
