@@ -62,6 +62,15 @@ body {
   --primary-light: #8fd0dc;
 }
 
+:root {
+  --chart-1: #8bb8ff;
+  --chart-2: #ffed91;
+  --chart-3: #d4a1ff;
+  --chart-4: #ff8d94;
+  --chart-5: #80f1eb;
+  --chart-6: #91f2a7;
+}
+
 [data-theme="dark"] {
   /* Background */
   --bg-dark:    #161F30;

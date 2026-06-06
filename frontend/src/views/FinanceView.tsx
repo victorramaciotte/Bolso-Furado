@@ -14,6 +14,7 @@ interface Props {
   editingEntry: EntryData | null
   onLogout: () => void
   setEditingEntry: (value: EntryData | null) => void
+  onOpenReports: () => void
   user: {
     id: number
     name: string
@@ -21,7 +22,7 @@ interface Props {
   }
 }
 
-function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, user, onLogout} : Props) {
+function FinanceView({openModal, setOpenModal, editingEntry, setEditingEntry, onOpenReports, user, onLogout} : Props) {
   const [reload, setReload] = useState(0)
   const [showFilters, setShowFilters] = useState(false)
   const [categories, setCategories] = useState<CategoryOption[]>([])
@@ -61,7 +62,7 @@ useEffect(() => {
     <div>
         <AccountCard user={user} onLogout={onLogout}/>
         <div className='menu-container'>
-            <button>
+            <button onClick={onOpenReports}>
               <i className="fi fi-br-chart-simple"></i>
               Relatórios
               </button>

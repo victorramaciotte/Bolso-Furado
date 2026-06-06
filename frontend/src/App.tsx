@@ -8,12 +8,13 @@ import FAB from './components/FAB'
 import type { EntryData } from './features/Entries/ListEntries'
 import type { GoalData } from './features/Goals/ListGoals'
 import AuthView from './views/AuthView'
+import ReportsView from './features/Reports/ReportsView'
 
 function App() {
   const isMobile = useIsMobile()
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') ?? '{}'))
-  const [activeTab, setActiveTab] = useState('finance')
+  const [activeTab, setActiveTab] = useState<'finance' | 'goals' | 'reports'>('finance')
   const [openModal, setOpenModal] = useState(false)
   const [openGoalModal, setOpenGoalModal] = useState(false)
   const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
@@ -49,6 +50,7 @@ function App() {
                                           setEditingEntry={setEditingEntry}
                                           user={user}
                                           onLogout={handleLogout}
+                                          onOpenReports={() => setActiveTab('reports')}
                                           />}
           {activeTab === 'goals' && <GoalsView 
                                           openModal={openGoalModal}
@@ -56,6 +58,7 @@ function App() {
                                           editingGoal={editingGoal}
                                           setEditingGoal={setEditingGoal}
                                           />}
+          {activeTab === 'reports' && <ReportsView />}
         </main>
         <nav className='menu'>
           <div>
@@ -69,15 +72,17 @@ function App() {
             </button>
           </div>
           
-          <FAB onClick={() => {
-                if (activeTab === 'finance') {
-                  setEditingEntry(null)
-                  setOpenModal(true)
-                } else if (activeTab === 'goals') {
-                  setOpenGoalModal(true) 
-                  setEditingGoal(null)
-                }
-                }}></FAB>
+          {activeTab !== 'reports' && (
+            <FAB onClick={() => {
+              if (activeTab === 'finance') {
+                setEditingEntry(null)
+                setOpenModal(true)
+              } else if (activeTab === 'goals') {
+                setOpenGoalModal(true)
+                setEditingGoal(null)
+              }
+            }} />
+          )}
         </nav>
         </section>
       ) : (
