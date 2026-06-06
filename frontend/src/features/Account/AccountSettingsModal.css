@@ -1,0 +1,125 @@
+.account-settings-modal {
+  width: min(92vw, 440px);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 1rem;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.account-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-settings-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.account-settings-header button {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.account-settings-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .35rem;
+  background: var(--bg-light);
+  border-radius: .75rem;
+  padding: .25rem;
+}
+
+.account-settings-tabs button {
+  border: none;
+  border-radius: .6rem;
+  background: transparent;
+  color: var(--text-muted);
+  padding: .65rem .4rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.account-settings-tabs button.active {
+  background: var(--primary);
+  color: var(--colored-text);
+}
+
+.account-settings-section {
+  display: grid;
+  gap: .75rem;
+  min-height: 8rem;
+}
+
+.account-settings-section label {
+  display: grid;
+  gap: .35rem;
+  font-weight: 700;
+}
+
+.account-settings-section input {
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  background: var(--bg-light);
+  color: var(--text);
+  padding: .75rem;
+  font: inherit;
+  min-width: 0;
+}
+
+.category-limits-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-weight: 700;
+}
+
+.category-limits-header small {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.category-limits-list {
+  display: grid;
+  gap: .5rem;
+}
+
+.category-limit-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 9rem;
+  align-items: center;
+  gap: .75rem;
+}
+
+.category-limit-row span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-category-limits {
+  margin: 0;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: center;
+}
+
+.account-settings-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+  position: sticky;
+  bottom: -1rem;
+  background: var(--bg);
+  padding-top: .75rem;
+}

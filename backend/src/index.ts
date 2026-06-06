@@ -303,4 +303,139 @@ app.delete('/categories/:id', authMiddleware, async (req, res) => {
 });
 
 
+//ACCOUNT//////////////////////////////////////////////////////////////////////
+
+function getCurrentMonthRange() {
+  const now = new Date()
+  const startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+  const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)
+
+  return { startDate, endDate }
+}
+
+app.get('/account/summary', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId!
+    const { startDate, endDate } = getCurrentMonthRange()
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { initialBalance: true }
+    })
+
+    const entries = await prisma.entry.findMany({
+      where: { userId },
+      select: { value: true, type: true }
+    })
+
+    const goals = await prisma.goal.findMany({
+      where: { userId },
+      select: { current_amount: true }
+    })
+
+    const budget = await prisma.budget.findFirst({
+      where: {
+        userId,
+        periodType: 'month',
+        startDate,
+        endDate
+      },
+      include: {
+        categories: {
+          include: { category: true }
+        }
+      }
+    })
+
+    const totalIncome = entries
+      .filter(entry => entry.type === 'income')
+      .reduce((sum, entry) => sum + entry.value, 0)
+
+    const totalExpenses = entries
+      .filter(entry => entry.type === 'expense')
+      .reduce((sum, entry) => sum + entry.value, 0)
+
+    const totalGoals = goals.reduce((sum, goal) => sum + goal.current_amount, 0)
+
+    const availableBalance =
+      (user?.initialBalance ?? 0) + totalIncome - totalExpenses - totalGoals
+
+    res.json({
+      initialBalance: user?.initialBalance ?? 0,
+      availableBalance,
+      budgetAmount: budget?.amount ?? 0,
+      categoryLimits: budget?.categories.map(item => ({
+        categoryId: item.categoryId,
+        categoryName: item.category.name,
+        amount: item.amount
+      })) ?? []
+    })
+  } catch (err) {
+    console.error('Erro ao buscar resumo da conta:', err)
+    res.status(500).json({ error: String(err) })
+  }
+})
+
+app.put('/account/settings', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId!
+    const { initialBalance, budgetAmount, categoryLimits } = req.body
+    const { startDate, endDate } = getCurrentMonthRange()
+
+    const result = await prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: userId },
+        data: { initialBalance: Number(initialBalance || 0) }
+      })
+
+      const existingBudget = await tx.budget.findFirst({
+        where: {
+          userId,
+          periodType: 'month',
+          startDate,
+          endDate
+        }
+      })
+
+      const budget = existingBudget
+        ? await tx.budget.update({
+            where: { id: existingBudget.id },
+            data: { amount: Number(budgetAmount || 0) }
+          })
+        : await tx.budget.create({
+            data: {
+              userId,
+              name: 'Orçamento mensal',
+              periodType: 'month',
+              startDate,
+              endDate,
+              amount: Number(budgetAmount || 0)
+            }
+          })
+
+      await tx.categoryBudget.deleteMany({
+        where: { budgetId: budget.id }
+      })
+
+      if (Array.isArray(categoryLimits) && categoryLimits.length > 0) {
+        await tx.categoryBudget.createMany({
+          data: categoryLimits.map((limit: { categoryId: number; amount: number }) => ({
+            budgetId: budget.id,
+            categoryId: Number(limit.categoryId),
+            amount: Number(limit.amount || 0)
+          }))
+        })
+      }
+
+      return budget
+    })
+
+    res.json(result)
+  } catch (err) {
+    console.error('Erro ao salvar configurações da conta:', err)
+    res.status(500).json({ error: String(err) })
+  }
+})
+
+
 app.listen(3000, () => console.log("Servidor ON na porta 3000"));

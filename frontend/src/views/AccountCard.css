@@ -25,10 +25,25 @@
     }
 
     .balance {
+        display: flex;
+        align-items: flex-start;
+        gap: .2rem;
         font-weight: 700;
         font-size: 3rem;
         color: var(--text-light);
         grid-area: balance;
+
+        p {
+            margin: 0;
+            line-height: 1;
+        }
+    }
+
+    .currency {
+        line-height: 1;
+        font-size: .35em;
+        color: var(--primary-light);
+        padding-top: .45em;
     }
 
     .budget {

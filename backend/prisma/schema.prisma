@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id         Int            @id @default(autoincrement())
-  name       String
-  email      String         @unique
-  password   String
-  entries    Entry[]
-  goals      Goal[]
-  categories Category[]
+  id              Int            @id @default(autoincrement())
+  name            String
+  email           String         @unique
+  password        String
+  initialBalance  Float          @default(0)
+  entries         Entry[]
+  goals           Goal[]
+  categories      Category[]
+  budgets         Budget[]
 }
 
 model Entry {
@@ -46,11 +48,33 @@ model Goal {
 }
 
 model Category {
-  id              Int       @id @default(autoincrement())
-  user            User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              Int                 @id @default(autoincrement())
+  user            User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          Int?
   name            String
-  normalizedName  String    @default("")
+  normalizedName  String              @default("")
   entries         Entry[]
+  categoryBudgets CategoryBudget[]
 
+}
+
+model Budget {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  name        String
+  periodType  String   // month, week, year
+  startDate   DateTime
+  endDate     DateTime
+  amount      Float
+  categories  CategoryBudget[]
+}
+
+model CategoryBudget {
+  id         Int      @id @default(autoincrement())
+  budget     Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  budgetId   Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  amount     Float
 }
