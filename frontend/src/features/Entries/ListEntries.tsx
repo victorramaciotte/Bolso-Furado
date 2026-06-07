@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './ListEntries.css'
 import Entry from './Entry' 
 import { getEntries } from '../../services/financeService'
@@ -22,7 +22,7 @@ export interface EntryData {
   }
 }
 
-export type CreateEntryData = Omit <EntryData, 'id' | 'category'>
+export type CreateEntryData = Omit<EntryData, 'id' | 'category'>
 
 interface Props {
   onEdit: (entry: EntryData) => void
@@ -33,6 +33,8 @@ export default function ListEntries({ onEdit, filters }: Props) {
   const [entries, setEntries] = useState<EntryData[]>([])
   const [loading, setLoading] = useState(true)
   const [toggle, setToggle] = useState<number | null>(null)
+  const [isScrollable, setIsScrollable] = useState(false)
+  const scrollRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     getEntries()
@@ -42,56 +44,73 @@ export default function ListEntries({ onEdit, filters }: Props) {
       })
   }, [])
 
-  if (loading) return <p className="loading-list">Carregando...</p>
-
   const visibleEntries = entries.filter(entry => {
-  if (!filters) return true
+    if (!filters) return true
 
-  const date = new Date(entry.date)
+    const date = new Date(entry.date)
 
-  const matchesMonth =
-    filters.month === 'all' || date.getMonth() === filters.month
+    const matchesMonth =
+      filters.month === 'all' || date.getMonth() === filters.month
 
-  const matchesYear =
-    filters.year === 'all' || date.getFullYear() === filters.year
+    const matchesYear =
+      filters.year === 'all' || date.getFullYear() === filters.year
 
-  const matchesCategory =
-    filters.categoryId === 'all' || entry.category_id === filters.categoryId
+    const matchesCategory =
+      filters.categoryId === 'all' || entry.category_id === filters.categoryId
 
-  return matchesMonth && matchesYear && matchesCategory
-})
+    return matchesMonth && matchesYear && matchesCategory
+  })
+
+  useEffect(() => {
+    function checkScroll() {
+      const element = scrollRef.current
+      if (!element) return
+
+      setIsScrollable(element.scrollHeight > element.clientHeight + 1)
+    }
+
+    checkScroll()
+    window.addEventListener('resize', checkScroll)
+
+    return () => {
+      window.removeEventListener('resize', checkScroll)
+    }
+  }, [visibleEntries.length, loading])
 
   return (
-    <div>
-      {visibleEntries.length > 0? (
+    <div
+      ref={scrollRef}
+      className={`entries-scroll-shell ${isScrollable ? 'has-scroll' : ''}`}
+    >
+      {loading ? (
+        <p className="loading-list">Carregando...</p>
+      ) : visibleEntries.length > 0 ? (
         <ul className="list-entries">
-        {visibleEntries.map(entry => (
-          <Entry
-            key={entry.id}
-            name={entry.name}
-            value={entry.value}
-            type={entry.type}
-            source={entry.source}
-            reason={entry.reason}
-            status={entry.status}
-            recurrence={entry.recurrence}
-            date={entry.date}
-            endDate={entry.endDate}
-            category_id={entry.category_id}
-            category={entry.category}
-            toggle={toggle === entry.id}
-            onEdit={() => onEdit(entry)}
-            onToggle={() => setToggle(prev => prev === entry.id ? null : entry.id)}
-          />
-        ))}
-      </ul>
+          {visibleEntries.map(entry => (
+            <Entry
+              key={entry.id}
+              name={entry.name}
+              value={entry.value}
+              type={entry.type}
+              source={entry.source}
+              reason={entry.reason}
+              status={entry.status}
+              recurrence={entry.recurrence}
+              date={entry.date}
+              endDate={entry.endDate}
+              category_id={entry.category_id}
+              category={entry.category}
+              toggle={toggle === entry.id}
+              onEdit={() => onEdit(entry)}
+              onToggle={() => setToggle(prev => prev === entry.id ? null : entry.id)}
+            />
+          ))}
+        </ul>
       ) : (
         <div className="empty-list">
           <p>Nenhum lançamento encontrado. Registre algo novo!</p>
         </div>
       )}
-      
     </div>
-    
   )
 }

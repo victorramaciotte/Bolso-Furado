@@ -67,7 +67,7 @@ function FinanceView({
   }
 
   return (
-    <div>
+    <div className="finance-screen">
       <AccountCard user={user} onLogout={onLogout} />
 
       <div className="menu-container">
