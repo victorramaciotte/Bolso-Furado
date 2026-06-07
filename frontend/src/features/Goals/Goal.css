@@ -184,3 +184,60 @@ i {
     padding: 1rem;
     gap: 1rem;
 }
+
+.achievement-toast {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 6rem;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .75rem;
+    align-items: center;
+    max-width: 28rem;
+    margin: 0 auto;
+    padding: .9rem 1rem;
+    border: 1px solid var(--success);
+    border-radius: .75rem;
+    background-color: var(--success-light);
+    color: var(--success-dark);
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--text), transparent 78%);
+    animation: achievementIn .25s ease-out;
+}
+
+.achievement-toast strong {
+    display: block;
+    font-size: 1rem;
+}
+
+.achievement-toast p {
+    margin: .15rem 0 0;
+    color: var(--text);
+    font-size: .9rem;
+    line-height: 1.3;
+}
+
+.achievement-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--success);
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+@keyframes achievementIn {
+    from {
+        opacity: 0;
+        transform: translateY(.75rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

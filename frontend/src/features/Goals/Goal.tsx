@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './Goal.css'
 import { NumericFormat } from 'react-number-format'
 import { updateGoal } from '../../services/goalService'
@@ -17,13 +17,75 @@ interface GoalProps {
     onUpdate: () => void
 }
 
+type Achievement = {
+    threshold: 50 | 100
+    title: string
+    message: string
+}
+
+const ACHIEVEMENTS: Achievement[] = [
+    {
+        threshold: 50,
+        title: 'Meio caminho andado!',
+        message: 'Você chegou a 50% da sua meta.'
+    },
+    {
+        threshold: 100,
+        title: 'Meta concluída!',
+        message: 'Você completou o valor planejado.'
+    }
+]
+
 function Goal({ id, name, initial_amount, target_amount, current_amount, deadline, toggle, onEdit, onToggle, onUpdate}: GoalProps) {
   
-    const goalProgress = (current_amount!/target_amount)*100
+    const goalProgress = ((current_amount ?? 0) / target_amount) * 100
+    const visibleGoalProgress = Math.min(goalProgress, 100)
     const [showUpdateAmount, setShowUpdateAmount] = useState(false)
     const [showConfirm, setShowConfirm] = useState(false)
     const [amount, setAmount] = useState('')
     const [decrease, setDecrease] = useState(false);
+
+    const [achievement, setAchievement] = useState<Achievement | null>(null)
+    const achievementTimeout = useRef<number | null>(null)
+
+    useEffect(() => {
+        return () => {
+            if (achievementTimeout.current) {
+                window.clearTimeout(achievementTimeout.current)
+            }
+        }
+    }, [])
+
+    function achievementKey(threshold: number) {
+        return `goal-achievement-${id}-${threshold}`
+    }
+
+    function showAchievement(newAchievement: Achievement) {
+        if (achievementTimeout.current) {
+            window.clearTimeout(achievementTimeout.current)
+        }
+
+        setAchievement(newAchievement)
+
+        achievementTimeout.current = window.setTimeout(() => {
+            setAchievement(null)
+        }, 9000)
+    }
+
+    function unlockAchievements(previousProgress: number, nextProgress: number) {
+        const unlocked = ACHIEVEMENTS.filter(item => {
+            const alreadyShown = localStorage.getItem(achievementKey(item.threshold)) === 'true'
+            return !alreadyShown && previousProgress < item.threshold && nextProgress >= item.threshold
+        })
+
+        unlocked.forEach(item => {
+            localStorage.setItem(achievementKey(item.threshold), 'true')
+        })
+
+        if (unlocked.length > 0) {
+            showAchievement(unlocked[unlocked.length - 1])
+        }
+    }
 
     function progressColor (value: number) {
         if (value <= 30) return 'var(--danger)'
@@ -32,10 +94,16 @@ function Goal({ id, name, initial_amount, target_amount, current_amount, deadlin
     }
 
     async function updateAmount () {
+        const parsedAmount = parseFloat(amount)
+        if (!parsedAmount || parsedAmount <= 0) return
+
         const base = current_amount ?? 0
         const newAmount = decrease 
-            ? base - parseFloat(amount)
-            : base + parseFloat(amount)
+            ? base - parsedAmount
+            : base + parsedAmount
+
+        const previousProgress = (base / target_amount) * 100
+        const nextProgress = (newAmount / target_amount) * 100
 
         await updateGoal(id, { 
             name, 
@@ -43,6 +111,10 @@ function Goal({ id, name, initial_amount, target_amount, current_amount, deadlin
             current_amount: newAmount, 
             initial_amount 
         })
+
+        if (!decrease) {
+            unlockAchievements(previousProgress, nextProgress)
+        }
 
         setShowUpdateAmount(false) 
         setAmount('')               
@@ -77,14 +149,25 @@ function Goal({ id, name, initial_amount, target_amount, current_amount, deadlin
 
                         <span className='progress-info'>
                             <p className='label'>Progresso:</p>
-                            <p className='perc'>{goalProgress}%</p>
+                            <p className='perc'>{goalProgress.toFixed(0)}%</p>
                             <div className='progress-bar'>
-                                <div className='progress' style={{width:`${goalProgress}%`, backgroundColor: progressColor(goalProgress)}}></div>
+                                <div
+                                    className='progress'
+                                    style={{
+                                        width: `${visibleGoalProgress}%`,
+                                        backgroundColor: progressColor(goalProgress)
+                                    }}
+                                ></div>
                             </div>
                         </span>
                         
                         
-                        <p className='progress-msg'>Falta {(target_amount - current_amount!).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} para você atingir sua meta!</p>
+                        <p className='progress-msg'>
+                            {goalProgress >= 100
+                                ? 'Você atingiu sua meta!'
+                                : `Falta ${(target_amount - (current_amount ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} para você atingir sua meta!`
+                            }
+                        </p>
                     </section>
                     
                     <span className='amount-action'>
@@ -151,6 +234,23 @@ function Goal({ id, name, initial_amount, target_amount, current_amount, deadlin
             )
         }
         
+        {achievement && (
+            <div
+                className='achievement-toast'
+                role='status'
+                aria-live='polite'
+                onClick={e => e.stopPropagation()}
+            >
+                <span className='achievement-icon'>
+                    <i className='fi fi-sr-trophy'></i>
+                </span>
+
+                <span>
+                    <strong>{achievement.title}</strong>
+                    <p>{achievement.message} "{name}" está mais perto do seu objetivo.</p>
+                </span>
+            </div>
+        )}
       
     </div>
   )
