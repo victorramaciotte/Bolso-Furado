@@ -9,16 +9,19 @@ import type { EntryData } from './features/Entries/ListEntries'
 import type { GoalData } from './features/Goals/ListGoals'
 import AuthView from './views/AuthView'
 import ReportsView from './features/Reports/ReportsView'
+import CalendarView from './features/Calendar/CalendarView'
+import ModalEntry from './features/Entries/ModalEntry'
 
 function App() {
   const isMobile = useIsMobile()
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') ?? '{}'))
-  const [activeTab, setActiveTab] = useState<'finance' | 'goals' | 'reports'>('finance')
+  const [activeTab, setActiveTab] = useState<'finance' | 'goals' | 'reports' | 'calendar'>('finance')
   const [openModal, setOpenModal] = useState(false)
   const [openGoalModal, setOpenGoalModal] = useState(false)
   const [editingEntry, setEditingEntry] = useState<EntryData | null>(null)
   const [editingGoal, setEditingGoal] = useState<GoalData | null>(null)
+  const [entriesReload, setEntriesReload] = useState(0)
 
   if (!token) {
     return <AuthView onLogin={(t, u) => { 
@@ -37,6 +40,17 @@ function App() {
     setUser({})
   }
   
+  function closeEntryModal() {
+    setOpenModal(false)
+    setEditingEntry(null)
+  }
+
+  function closeEntryModalAndReload() {
+    closeEntryModal()
+    setEntriesReload(r => r + 1)
+  }
+
+
   
   return (
     <>
@@ -51,6 +65,7 @@ function App() {
                                           user={user}
                                           onLogout={handleLogout}
                                           onOpenReports={() => setActiveTab('reports')}
+                                          onOpenCalendar={() => setActiveTab('calendar')}
                                           />}
           {activeTab === 'goals' && <GoalsView 
                                           openModal={openGoalModal}
@@ -59,6 +74,15 @@ function App() {
                                           setEditingGoal={setEditingGoal}
                                           />}
           {activeTab === 'reports' && <ReportsView />}
+          {activeTab === 'calendar' && <CalendarView 
+                                          onBack={() => setActiveTab('finance')}
+                                          reloadKey={entriesReload}
+                                          onOpenEntryModal={() => {
+                                            setEditingEntry(null)
+                                            setOpenModal(true)
+                                            
+                                          }}
+                                        />}
         </main>
         <nav className='menu'>
           <div>
@@ -80,6 +104,9 @@ function App() {
               } else if (activeTab === 'goals') {
                 setOpenGoalModal(true)
                 setEditingGoal(null)
+              } else if (activeTab === 'calendar') {
+                setEditingEntry(null)
+                setOpenModal(true)
               }
             }} />
           )}
@@ -92,8 +119,15 @@ function App() {
         </>
 
       )}
+
+      {openModal && (
+        <ModalEntry
+          onClose={closeEntryModal}
+          onSuccess={closeEntryModalAndReload}
+          entry={editingEntry ?? undefined}
+        />
+      )}
     </>
-    
     
   )
 }

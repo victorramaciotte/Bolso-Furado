@@ -38,7 +38,7 @@
 
 .calendar {
   grid-area: calendar;
-  background-color: var(--border-muted);
+  flex-grow: 0;
 }
 
 .analytics {

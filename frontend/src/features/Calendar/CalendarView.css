@@ -1,0 +1,390 @@
+.top {
+    display: flex;
+    align-items: flex-start;
+    height: 3rem;
+    margin-bottom: .5rem;
+}
+
+.cal-wrapper {
+    height: 100%;
+}
+
+.cal-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;           
+  overflow: hidden;       
+  background-color: var(--bg);
+  border-radius: 1rem;
+  padding: 0.85rem;
+  box-sizing: border-box;
+  gap: 0.5rem;
+  justify-content: space-between; /* Garante que o Header fique em cima e o Nav embaixo fixos */
+}
+
+.cal-loading {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 1rem;
+}
+
+/* ── Header ── */
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  padding: .5rem;
+}
+
+.cal-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.cal-filter-btn {
+    display: flex;
+    gap: .5rem;
+    background: var(--bg-dark);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: .25rem .5rem;
+    border-radius: 0.4rem;
+    transition: background 0.15s;
+}
+.cal-filter-btn:hover { background-color: var(--highlight, rgba(0,0,0,0.06)); }
+
+/* ── Picker ── */
+.cal-picker {
+  background-color: var(--bg-dark);
+  border-radius: 0.75rem;
+  padding: 0.65rem;
+  animation: cal-fade 0.15s ease;
+}
+
+.cal-picker-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+
+  button {
+    flex: 1;
+    background: none;
+    border: none;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 0.3rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+  }
+
+  button.active {
+    background-color: var(--primary);
+    color: var(--bg);
+  }
+}
+
+.cal-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.3rem;
+}
+
+.cal-picker-item {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--text);
+  padding: 0.35rem 0;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.12s;
+}
+.cal-picker-item:hover { background-color: var(--highlight, rgba(0,0,0,0.06)); }
+.cal-picker-item.active {
+  background-color: var(--primary);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+/* ── Weekday labels ── */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cal-weekday {
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding-bottom: 0.25rem;
+}
+
+/* ── Grid ── */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* Força o grid a ter sempre 6 linhas com tamanhos exatamente iguais, */
+  /* impedindo o container de mudar de tamanho entre os meses */
+  grid-template-rows: repeat(6, 1fr); 
+  gap: 3px;
+  flex-grow: 1; /* Faz o grid ocupar todo o espaço restante vertical de forma fixa */
+}
+
+.cal-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.45rem;
+  cursor: default;
+  box-sizing: border-box;
+  height: 100%;
+  position: relative; /* Necessário para posicionar as bolinhas sem empurrar o texto */
+  overflow: hidden;
+}
+
+.cal-cell.cal-empty {
+  /* placeholder — invisible */
+}
+
+.cal-cell.cal-in-month {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.cal-cell.cal-in-month:hover {
+  background-color: var(--highlight, rgba(0,0,0,0.05));
+}
+
+.cal-cell.cal-selected {
+  background-color: color-mix(in srgb, var(--primary), transparent 82%);
+}
+
+/* Today highlight */
+.cal-cell.cal-today .cal-day-num {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.cal-day-num {
+  font-size: 1.2rem; /* Reduzido levemente para caber melhor em grids fixos */
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* Remove heranças de line-height que quebram o centro */
+}
+
+/* ── Dots — uniform size, always same row height ── */
+.cal-dots {
+  position: absolute;
+  bottom: 0; /* Fixado na base da célula */
+  margin: auto;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  height: 5px;
+  pointer-events: none; /* Evita interferir no clique da célula */
+}
+
+.cal-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-income    { background-color: var(--success); }
+.dot-expense   { background-color: var(--danger); }
+.dot-recurring { background-color: var(--info); }
+
+/* ── Nav embaixo ── */
+.cal-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.1rem;
+  flex-shrink: 0;
+}
+
+.cal-nav {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.4rem;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+}
+.cal-nav:hover { background-color: var(--highlight, rgba(0,0,0,0.06)); }
+
+/* ── Compact (dashboard) ── */
+.cal-compact .cal-day-num  { font-size: 0.68rem; }
+.cal-compact .cal-dot      { width: 4px; height: 4px; }
+.cal-compact .cal-title    { font-size: 0.82rem; }
+
+/* ── Popup ── */
+.cal-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+  animation: cal-fade 0.15s ease;
+}
+
+.cal-popup {
+  background: var(--bg);
+  border-radius: 1rem 1rem 0 0;
+  padding: 1rem 1rem 2.5rem;
+  width: 100%;
+  max-width: 480px;
+  max-height: 60vh;
+  overflow-y: auto;
+  animation: cal-slide-up 0.2s ease;
+}
+
+.cal-popup-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0.75rem;
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+}
+
+.cal-popup-empty {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.cal-popup-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cal-popup-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.6rem;
+  border-left: 3px solid transparent;
+  background-color: var(--bg-dark);
+}
+
+.item-income    { border-left-color: var(--success); }
+.item-expense   { border-left-color: var(--danger); }
+.item-recurring { border-left-color: var(--info); }
+
+.cal-popup-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.cal-popup-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 14rem;
+}
+
+.cal-popup-cat {
+  font-size: 0.67rem;
+  color: var(--text-muted);
+}
+
+.cal-popup-value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}
+
+.item-income  .cal-popup-value  { color: var(--success, #22c55e); }
+.item-expense .cal-popup-value  { color: var(--danger,  #ef4444); }
+.item-recurring .cal-popup-value { color: var(--info);; }
+
+/* Botão de voltar */
+.cal-back-btn {
+  background: var(--bg);
+  border: none;
+  color: var(--border-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 2rem;
+  transition: background 0.15s;
+}
+.cal-back-btn:hover { background-color: var(--highlight); }
+
+@keyframes cal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cal-slide-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .cal-wrapper {
+    max-height: 40rem;
+  }
+    
+}

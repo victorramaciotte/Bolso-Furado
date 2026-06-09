@@ -7,6 +7,7 @@ import type { GoalData } from '../features/Goals/ListGoals'
 import AccountCard from './AccountCard'
 import ReportsView from '../features/Reports/ReportsView'
 import BudgetMonitor from '../features/Monitoring/BudgetMonitor'
+import CalendarView from '../features/Calendar/CalendarView'
 
 interface Props {
   user: {
@@ -92,7 +93,9 @@ export default function Dashboard({ user, onLogout }: Props) {
         />
       </div>
 
-      <div className="calendar"></div>
+      <div className="calendar dashboard-panel">
+         <CalendarView compact />
+      </div>
 
       <div className="analytics dashboard-panel">
         <div className="dashboard-panel-content reports-panel">

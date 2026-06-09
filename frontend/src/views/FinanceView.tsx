@@ -16,6 +16,7 @@ interface Props {
   onLogout: () => void
   setEditingEntry: (value: EntryData | null) => void
   onOpenReports: () => void
+  onOpenCalendar: () => void
   user: {
     id: number
     name: string
@@ -29,6 +30,7 @@ function FinanceView({
   editingEntry,
   setEditingEntry,
   onOpenReports,
+  onOpenCalendar,
   user,
   onLogout
 }: Props) {
@@ -76,7 +78,7 @@ function FinanceView({
           Relatórios
         </button>
 
-        <button>
+        <button onClick={onOpenCalendar}>
           <i className="fi fi-br-calendar"></i>
         </button>
 
