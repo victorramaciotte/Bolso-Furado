@@ -26,7 +26,7 @@ body {
 
   /* Sucesso */
   --success-light: #dff2e8;
-  --success:       #36B26E;
+  --success:       #139c51;
   --success-dark:  #257a4c;
 
   /* Informação */
@@ -90,6 +90,25 @@ body {
   --primary-dark:  #195966;
   --primary:       #40aabf;
   --primary-light: #8fd0dc;
+
+    --danger-light:  #f9e0e5;
+  --danger:        #c92f53;
+  --danger-dark:   #7a2439;
+
+  /* Sucesso */
+  --success-light: #dff2e8;
+  --success:       #36B26E;
+  --success-dark:  #36B26E;
+
+  /* Informação */
+  --info-light:    #ebe4f7;
+  --info:          #7C4DBD;
+  --info-dark:     #563585;
+
+  /* Atenção */
+  --warning-light: #faf0dc;
+  --warning:       #D99536;
+  --warning-dark:  #9a6a25;
 }
 
 .red-btn {

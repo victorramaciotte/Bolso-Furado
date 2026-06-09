@@ -88,6 +88,10 @@
     }
 }
 
+[data-theme="dark"] .current-amount {
+  color: var(--primary);
+}
+
 .target {
     display: flex;
     justify-content: flex-end;

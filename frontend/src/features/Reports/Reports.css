@@ -45,6 +45,10 @@
   transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
 }
 
+[data-theme="dark"] .reports-filter-btn, .reports-mode-toggle button{
+      color: var(--primary);
+    }
+
 .reports-mode-toggle button:hover,
 .reports-filter-btn:hover {
   background-color: var(--bg);

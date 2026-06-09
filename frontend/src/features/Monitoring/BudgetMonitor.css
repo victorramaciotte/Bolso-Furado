@@ -19,6 +19,10 @@
   font-weight: 700;
 }
 
+[data-theme="dark"] .monitor-summary-btn {
+      color: var(--primary);
+    }
+
 .monitor-summary-btn i {
   font-size: 1rem;
 }
@@ -207,4 +211,8 @@
   color: var(--primary-dark);
   font-weight: 800;
   white-space: nowrap;
+}
+
+[data-theme="dark"] .budget-details-item span {
+  color: var(--primary);
 }

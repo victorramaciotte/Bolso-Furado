@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import './AccountCard.css'
 import AccountSettingsModal from '../features/Account/AccountSettingsModal'
 import { getCategories } from '../services/financeService'
 import { getAccountSummary, updateAccountSettings, type AccountSummary } from '../services/accountService'
+import { ThemeContext } from '../components/ThemeContext'
+
+
 
 type CategoryOption = {
   id: number
@@ -27,6 +30,7 @@ function formatCurrency(value: number) {
 
 export default function AccountCard({ user, onLogout }: Props) {
   const [showMenu, setShowMenu] = useState(false)
+  const { theme, toggleTheme } = useContext(ThemeContext)
   const [showConfirm, setShowConfirm] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [categories, setCategories] = useState<CategoryOption[]>([])
@@ -79,8 +83,16 @@ export default function AccountCard({ user, onLogout }: Props) {
             </p>
         </span>
 
-        <button onClick={() => setShowSettings(true)}>
+        <button className='edit-btn' onClick={() => setShowSettings(true)}>
           <i className="fi fi-br-pencil"></i>
+        </button>
+
+        <button className='theme-btn' onClick={toggleTheme}>
+          {theme === 'dark' ? (
+            <i className="fi fi-br-sun"></i>
+          ) : (
+            <i className="fi fi-br-moon"></i>
+          )}
         </button>
 
         <span className='budget'>

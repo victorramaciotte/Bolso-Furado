@@ -15,7 +15,7 @@
     grid-template-areas: 
     "label edit"
     "balance balance"
-    ". budget";
+    "theme budget";
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 3fr 1fr;
 
@@ -64,13 +64,21 @@
         background-color: var(--colored-text-muted);
         color: var(--text-light);
         padding: .5rem 1rem;
-        grid-area: edit;
-        justify-self: end;
     }
 
     i {
         font-size: 1.3rem;
     }
+}
+
+.edit-btn {
+    grid-area: edit;
+    justify-self: end;
+}
+
+.theme-btn {
+    grid-area: theme;
+    justify-self: start;
 }
 
 .header-line {

@@ -42,6 +42,10 @@
         font-size: 1rem;
         font-weight: 700;
     }
+
+    [data-theme="dark"] & button {
+      color: var(--primary);
+    }
 }
 
 .finance-screen {
