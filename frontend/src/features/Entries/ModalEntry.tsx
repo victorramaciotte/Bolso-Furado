@@ -138,9 +138,9 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e: { stopPropagation: () => any }) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
-        <h2 className="modal-title">Registrar Lançamento</h2>
+        <h2 className="modal-title">Registrar Transação</h2>
 
-        <label>Nome Lançamento <span className="required">*</span></label>
+        <label>Nome Transação <span className="required">*</span></label>
         <input
           name="name"
           placeholder="Ex: Academia, Conta de Água, Lanche"
@@ -306,7 +306,7 @@ export default function ModalEntry({ onClose, onSuccess, entry}: Props) {
                                 </div>
                             </div>
                         )}
-          <button className="modal-btn btn-save" onClick={handleSubmit}>{editMode ? 'Salvar Alterações' : 'Registrar Lançamento'}</button>
+          <button className="modal-btn btn-save" onClick={handleSubmit}>{editMode ? 'Salvar Alterações' : 'Registrar Transação'}</button>
         </section>
 
         
