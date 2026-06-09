@@ -108,7 +108,7 @@ export default function ListEntries({ onEdit, filters }: Props) {
         </ul>
       ) : (
         <div className="empty-list">
-          <p>Nenhum lançamento encontrado. Registre algo novo!</p>
+          <p>Nenhuma transação encontrada. Registre algo novo!</p>
         </div>
       )}
     </div>

@@ -62,11 +62,11 @@ export default function Dashboard({ user, onLogout }: Props) {
 
       <div className="entries dashboard-panel">
         <div className="div-header">
-          <span>Lançamentos</span>
+          <span>Transações</span>
 
           <button onClick={openNewEntry}>
             <i className="fi fi-br-plus"></i>
-            Novo Lançamento
+            Nova Transação
           </button>
         </div>
 
