@@ -3,6 +3,8 @@ import { prisma } from './lib/prisma.js';
 import cors from 'cors'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto'
+import { sendEmail } from './lib/mailer.js'
 
 
 const app = express();
@@ -74,6 +76,76 @@ app.post('/auth/login', async (req, res) => {
     res.status(500).json({ error: String(err) });
   }
 });
+
+// RECUPERAÇÃO DE CONTA
+function generateToken() {
+  return crypto.randomBytes(32).toString('hex')
+}
+
+// SOLICITAR RECUPERAÇÃO DE SENHA
+app.post('/auth/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body
+
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    if (!user) {
+      return res.json({ message: 'Se o email existir, um link foi enviado' })
+    }
+
+    const resetToken = generateToken()
+    const resetTokenExpiry = new Date(Date.now() + 1000 * 60 * 30)
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { resetToken, resetTokenExpiry }
+    })
+
+    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`
+    await sendEmail(
+      email,
+      'Recuperação de senha — Bolso Furado',
+      `<p>Clique <a href="${resetUrl}">aqui</a> para redefinir sua senha. O link expira em 30 minutos.</p>`
+    )
+
+    res.json({ message: 'Se o email existir, um link foi enviado' })
+  } catch (err) {
+    res.status(500).json({ error: String(err) })
+  }
+})
+
+// REDEFINIR SENHA
+app.post('/auth/reset-password', async (req, res) => {
+  try {
+    const { token, password } = req.body
+
+    const user = await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpiry: { gt: new Date() }
+      }
+    })
+
+    if (!user) {
+      return res.status(400).json({ error: 'Token inválido ou expirado' })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null
+      }
+    })
+
+    res.json({ message: 'Senha redefinida com sucesso!' })
+  } catch (err) {
+    res.status(500).json({ error: String(err) })
+  }
+})
 
 // Rota para Listar
 app.get('/entries', authMiddleware, async (req, res) => {
